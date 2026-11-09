@@ -1,0 +1,196 @@
+/* ---------- Reset ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #1a1a1a;
+  background: #f7f7f7;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+img { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+
+/* ---------- Header ---------- */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e3e6ea;
+}
+
+.header__logo-img {
+  width: 112px;
+  height: 22px;
+  display: block;
+}
+
+.lang-switcher { display: flex; gap: 12px; }
+.lang-btn { background: none; border: none; font-size: 14px; font-weight: 500; color: #7a828e; cursor: pointer; padding: 4px; transition: color 0.2s; }
+.lang-btn.is-active { color: #1a1a1a; font-weight: 700; }
+.lang-btn:hover { color: #1a1a1a; }
+
+/* ---------- Блок с предупреждением ---------- */
+.alert-banner {
+  width: 100%;
+  background-color: #fff9e6;
+  border-bottom: 1px solid #f0e6d2;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: center;
+}
+.alert-banner__inner { width: 100%; max-width: 600px; display: flex; align-items: flex-start; gap: 16px; }
+.alert-banner__icon { color: #d97706; flex-shrink: 0; margin-top: 2px; }
+.alert-banner__content { display: flex; flex-direction: column; gap: 8px; }
+.alert-banner__text { font-size: 14px; line-height: 1.5; color: #4a5361; margin: 0; }
+.alert-banner__text--en { color: #7a828e; font-size: 13px; }
+
+/* ---------- Layout Container ---------- */
+.container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.main { flex: 1; display: flex; flex-direction: column; align-items: center; width: 100%; }
+
+/* ---------- Promo ---------- */
+.promo { width: 100%; display: flex; justify-content: center; }
+.promo__container { width: 40px; height: 36px; position: relative; overflow: visible; }
+.promo__img { width: 40px; height: 36px; object-fit: cover; object-position: center 25%; }
+.promo__box { position: absolute; top: 10px; left: 0; width: 180px; margin-left: -70px; background: #ffffff; padding: 16px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); z-index: 10; }
+.promo__title { font-size: 13px; font-weight: 700; color: #b8040f; margin-bottom: 8px; line-height: 1.2; }
+.promo__text { font-size: 14px; line-height: 1.4; color: #4a5361; font-weight: 400; }
+
+/* ---------- Premium Form ---------- */
+.premium-calc { width: 100%; max-width: 354px; background-color: #9b1139; padding: 32px 24px; display: flex; flex-direction: column; gap: 24px; }
+.premium-calc__title { color: #ffffff; font-size: 20px; font-weight: 400; text-align: left; }
+.premium-calc__form { display: flex; flex-direction: column; gap: 16px; }
+.input-group { position: relative; width: 100%; }
+.input-field { width: 100%; background: transparent; border: 1px solid #ffffff; color: #ffffff; padding: 24px 16px 8px; font-size: 16px; font-family: inherit; outline: none; transition: border-color 0.2s; }
+.input-field:focus { background: rgba(255, 255, 255, 0.05); }
+.input-label { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #ffffff; font-size: 16px; pointer-events: none; transition: all 0.2s ease; opacity: 0.8; }
+.input-field:focus + .input-label, .input-field:not(:placeholder-shown) + .input-label { top: 12px; font-size: 12px; opacity: 1; }
+.phone-group { display: flex; position: relative; }
+.phone-prefix { display: flex; align-items: center; justify-content: center; padding: 0 16px; border: 1px solid #ffffff; border-right: none; color: #ffffff; font-size: 16px; background: rgba(255, 255, 255, 0.05); }
+.phone-input { border-left: none; flex: 1; padding-left: 12px; }
+.phone-label { left: 72px; }
+.phone-input:focus + .phone-label, .phone-input:not(:placeholder-shown) + .phone-label { left: 72px; }
+
+/* Поле IBAN */
+.iban-group { display: flex; position: relative; }
+.iban-prefix { display: flex; align-items: center; justify-content: center; padding: 0 16px; border: 1px solid #ffffff; border-right: none; color: #ffffff; font-size: 16px; background: rgba(255, 255, 255, 0.05); }
+.iban-input { border-left: none; flex: 1; padding-left: 12px; }
+.iban-label { left: 72px; }
+.iban-input:focus + .iban-label, .iban-input:not(:placeholder-shown) + .iban-label { left: 72px; }
+
+/* Горизонтальный ряд (Улица -> Индекс -> Город) */
+.form-row { display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: 12px; width: 100%; }
+
+/* Плавная кнопка с закругленными углами */
+.premium-btn {
+  width: 100%;
+  background: #ffffff;
+  color: #9b1139;
+  border: none;
+  padding: 18px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+.premium-btn:hover { background: #f0f0f0; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); }
+.premium-btn:active { transform: scale(0.98); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
+
+/* ---------- Преимущества ---------- */
+.advantages { width: 100%; max-width: 400px; padding: 20px 0; display: flex; flex-direction: column; gap: 32px; }
+.advantages__title { font-size: 20px; font-weight: 700; color: #1a1a1a; text-align: left; }
+.advantages__lead { font-size: 15px; line-height: 1.5; color: #1a1a1a; text-align: left; }
+.advantages__list { display: flex; flex-direction: column; gap: 40px; margin-top: 16px; }
+.advantage-item { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; }
+.advantage-icon { color: #1a1a1a; display: flex; justify-content: center; align-items: center; }
+.advantage-title { font-size: 18px; font-weight: 400; line-height: 1.3; color: #4a5361; margin: 0; }
+
+/* ---------- Награды ---------- */
+.awards { width: 100%; background-color: #f0f0f0; padding: 40px 0; display: flex; justify-content: center; }
+.awards__container { width: 100%; max-width: 600px; padding: 0 24px; display: flex; flex-direction: column; align-items: flex-start; gap: 24px; }
+.awards__title { font-size: 20px; font-weight: 700; color: #1a1a1a; line-height: 1.3; max-width: 500px; }
+.awards__lead { font-size: 15px; line-height: 1.6; color: #1a1a1a; max-width: 500px; }
+.awards__badges { margin-top: 16px; }
+.awards__img { width: 356px; height: 83px; object-fit: contain; }
+
+/* ---------- Footer ---------- */
+.footer { width: 100%; display: flex; flex-direction: column; }
+.footer__top { background-color: #9b1139; padding: 32px 0; }
+.footer__top .footer__container { max-width: 600px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; align-items: flex-start; }
+.footer__title { color: #ffffff; font-size: 20px; font-weight: 500; margin-bottom: 6px; }
+.footer__subtitle { color: #ffffff; font-size: 14px; margin-bottom: 20px; opacity: 0.9; }
+.footer__btn { display: inline-block; background: #ffffff; color: #9b1139; padding: 10px 18px; font-size: 14px; font-weight: 500; transition: background 0.2s; }
+.footer__btn:hover { background: #f0f0f0; }
+.footer__main { background-color: #ffffff; padding: 32px 0; }
+.footer__main .footer__container { max-width: 600px; margin: 0 auto; padding: 0 24px; }
+.footer__nav-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 24px; margin-bottom: 32px; }
+.footer__nav-col { display: flex; flex-direction: column; gap: 12px; }
+.footer__nav-title { font-size: 13px; font-weight: 500; color: #1a1a1a; margin: 0; }
+.footer__nav-list { display: flex; flex-direction: column; gap: 8px; }
+.footer__nav-list a { font-size: 13px; color: #4a5361; font-weight: 400; transition: color 0.2s; }
+.footer__nav-list a:hover { color: #9b1139; }
+.footer__bottom { display: flex; flex-direction: column; gap: 16px; border-top: 1px solid #e3e6ea; padding-top: 20px; }
+.footer__legal { display: flex; flex-direction: column; gap: 8px; }
+.footer__legal a { font-size: 13px; font-weight: 400; color: #4a5361; transition: color 0.2s; }
+.footer__legal a:hover { color: #9b1139; }
+.footer__socials { display: flex; gap: 16px; margin-top: 8px; }
+.footer__socials a { color: #1a1a1a; transition: color 0.2s; }
+.footer__socials a:hover { color: #9b1139; }
+
+/* ---------- Мобильная версия ---------- */
+@media (max-width: 600px) {
+  .header { padding: 0 20px; }
+  .alert-banner { padding: 12px 20px; }
+  .alert-banner__text { font-size: 13px; }
+  .alert-banner__text--en { font-size: 12px; }
+
+  .container { padding: 24px 20px; gap: 24px; }
+  .promo { display: block; max-width: 320px; margin: 0 auto; }
+  .promo__container { width: 100%; height: auto; aspect-ratio: 4 / 3; position: relative; overflow: visible; }
+  .promo__img { width: 100%; height: 100%; border-radius: 8px 8px 0 0; }
+  .promo__box { position: relative; top: auto; left: auto; margin-left: auto; margin-right: auto; width: calc(100% - 24px); margin-top: -30px; border-radius: 8px; padding: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
+  .promo__title { font-size: 15px; }
+  .promo__text { font-size: 16px; }
+  
+  .premium-calc { max-width: 100%; padding: 24px 16px; }
+
+  .form-row { grid-template-columns: 1.5fr 1fr 1.5fr; gap: 8px; }
+  .form-row .input-field { padding: 20px 8px 6px 8px; font-size: 14px; }
+  .form-row .input-label { left: 8px; font-size: 14px; }
+  .form-row .input-field:focus + .input-label, .form-row .input-field:not(:placeholder-shown) + .input-label { top: 8px; font-size: 10px; }
+
+  .advantages { padding: 20px 0; }
+  .advantage-title { font-size: 16px; }
+  .awards__container { padding: 0 20px; }
+  .awards__badges { width: 100%; }
+  .awards__img { width: 100%; height: auto; max-width: 356px; }
+  .footer__top .footer__container, .footer__main .footer__container { padding: 0 20px; }
+  .footer__nav-grid { grid-template-columns: 1fr; gap: 24px; }
+}

