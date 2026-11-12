@@ -81,120 +81,55 @@ ul { list-style: none; }
 .promo__text { font-size: 14px; line-height: 1.4; color: #4a5361; font-weight: 400; }
 
 /* ---------- Premium Form ---------- */
-.premium-calc { width: 100%; max-width: 354px; background-color: #9b1139; padding: 32px 24px; display: flex; flex-direction: column; gap: 24px; }
+.premium-calc { width: 100%; max-width: 400px; background-color: #9b1139; padding: 32px 24px; display: flex; flex-direction: column; gap: 24px; }
 .premium-calc__title { color: #ffffff; font-size: 20px; font-weight: 400; text-align: left; }
 .premium-calc__form { display: flex; flex-direction: column; gap: 16px; }
 
-/* Базовые инпуты (без префиксов) */
-.input-group { position: relative; width: 100%; }
+/* Новый стиль инпутов */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.input-label-top {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 500;
+}
+
 .input-field {
   width: 100%;
   background: transparent;
   border: 1px solid #ffffff;
   color: #ffffff;
-  padding: 24px 16px 8px;
+  padding: 16px 16px;
   font-size: 16px;
   font-family: inherit;
   outline: none;
-  transition: border-color 0.2s;
-}
-.input-field:focus { background: rgba(255, 255, 255, 0.05); }
-.input-label {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #ffffff;
-  font-size: 16px;
-  pointer-events: none;
-  transition: all 0.2s ease;
-  opacity: 0.8;
-}
-.input-field:focus + .input-label,
-.input-field:not(:placeholder-shown) + .input-label { top: 12px; font-size: 12px; opacity: 1; }
-
-/* Уменьшенный лейбл для Postleitzahl */
-.input-label.label-small { font-size: 12px !important; }
-.input-field:focus + .label-small,
-.input-field:not(:placeholder-shown) + .label-small { font-size: 9px !important; top: 10px; }
-
-/* ---------- Группы с префиксом (телефон и IBAN) ---------- */
-.phone-group, .iban-group {
-  display: flex;
-  position: relative;
-  width: 100%;
-  border: 1px solid #ffffff;
-  background: transparent;
-  transition: border-color 0.2s;
-  border-radius: 0;
+  transition: background-color 0.2s;
+  height: 52px;
 }
 
-.phone-group:focus-within, .iban-group:focus-within {
-  border-color: #ffffff;
+.input-field:focus {
   background: rgba(255, 255, 255, 0.05);
 }
 
-.prefix-input {
-  width: 60px;
-  background: transparent;
-  border: none;
-  border-right: 1px solid rgba(255, 255, 255, 0.5);
-  color: #ffffff;
-  font-size: 17px;
-  font-family: inherit;
-  font-weight: 500;
-  text-align: center;
-  outline: none;
-  padding: 0 4px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  -moz-appearance: textfield;
+/* Серый полупрозрачный плейсхолдер */
+.input-field::placeholder {
+  color: rgba(255, 255, 255, 0.4);
 }
 
-.prefix-input::-webkit-outer-spin-button,
-.prefix-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+/* Горизонтальный ряд */
+.form-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.5fr;
+  gap: 12px;
+  width: 100%;
 }
 
-.phone-input, .iban-input {
-  border: none;
-  background: transparent;
-  flex: 1;
-  padding: 24px 16px 8px;
-  color: #ffffff;
-  font-size: 16px;
-  font-family: inherit;
-  outline: none;
-}
-
-.phone-label, .iban-label {
-  position: absolute;
-  left: 76px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #ffffff;
-  font-size: 16px;
-  pointer-events: none;
-  transition: all 0.2s ease;
-  opacity: 0.8;
-}
-
-.phone-input:focus + .phone-label,
-.phone-input:not(:placeholder-shown) + .phone-label,
-.iban-input:focus + .iban-label,
-.iban-input:not(:placeholder-shown) + .iban-label {
-  top: 12px;
-  font-size: 12px;
-  opacity: 1;
-}
-
-/* Горизонтальный ряд (Улица -> Индекс -> Город) */
-.form-row { display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: 12px; width: 100%; }
-
-/* Плавная кнопка с закругленными углами */
+/* Кнопка */
 .premium-btn {
   width: 100%;
   background: #ffffff;
@@ -208,6 +143,7 @@ ul { list-style: none; }
   transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
+  height: 56px;
 }
 .premium-btn:hover { background: #f0f0f0; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); }
 .premium-btn:active { transform: scale(0.98); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
@@ -253,7 +189,7 @@ ul { list-style: none; }
 .footer__socials a { color: #1a1a1a; transition: color 0.2s; }
 .footer__socials a:hover { color: #9b1139; }
 
-/* ---------- Мобильная версия (до 600px) ---------- */
+/* ---------- Мобильная версия ---------- */
 @media (max-width: 600px) {
   .header { padding: 0 20px; }
   .alert-banner { padding: 12px 20px; }
@@ -270,20 +206,9 @@ ul { list-style: none; }
   
   .premium-calc { max-width: 100%; padding: 24px 16px; }
 
-  .prefix-input { width: 48px; font-size: 15px; padding: 0 2px; }
-  .phone-input, .iban-input { padding: 20px 12px 6px; font-size: 14px; }
-  .phone-label, .iban-label { left: 62px; font-size: 14px; }
-  .phone-input:focus + .phone-label, .phone-input:not(:placeholder-shown) + .phone-label,
-  .iban-input:focus + .iban-label, .iban-input:not(:placeholder-shown) + .iban-label { top: 8px; font-size: 10px; }
-
-  .input-label.label-small { font-size: 10px !important; }
-  .input-field:focus + .label-small,
-  .input-field:not(:placeholder-shown) + .label-small { font-size: 7px !important; top: 6px; }
-
   .form-row { grid-template-columns: 1.5fr 1fr 1.5fr; gap: 8px; }
-  .form-row .input-field { padding: 20px 8px 6px 8px; font-size: 14px; }
-  .form-row .input-label { left: 8px; font-size: 14px; }
-  .form-row .input-field:focus + .input-label, .form-row .input-field:not(:placeholder-shown) + .input-label { top: 8px; font-size: 10px; }
+  .input-field { padding: 14px 10px; font-size: 14px; height: 46px; }
+  .input-label-top { font-size: 13px; }
 
   .advantages { padding: 20px 0; }
   .advantage-title { font-size: 16px; }
@@ -294,7 +219,7 @@ ul { list-style: none; }
   .footer__nav-grid { grid-template-columns: 1fr; gap: 24px; }
 }
 
-/* ---------- Планшеты / iPad (от 601px до 1024px) ---------- */
+/* ---------- Планшеты / iPad ---------- */
 @media (min-width: 601px) and (max-width: 1024px) {
   .container { padding: 50px 40px; gap: 50px; }
   .promo { display: block; max-width: 400px; margin: 0 auto; }
@@ -306,14 +231,6 @@ ul { list-style: none; }
 
   .premium-calc { max-width: 450px; padding: 40px 32px; }
   .premium-calc__title { font-size: 24px; }
-  .input-field { font-size: 17px; padding: 26px 16px 10px; }
-  .input-label { font-size: 17px; }
-  .prefix-input { width: 64px; font-size: 18px; padding: 0 4px; }
-  .phone-input, .iban-input { padding: 26px 16px 10px; font-size: 17px; }
-  .phone-label, .iban-label { left: 80px; font-size: 17px; }
-  .phone-input:focus + .phone-label, .phone-input:not(:placeholder-shown) + .phone-label,
-  .iban-input:focus + .iban-label, .iban-input:not(:placeholder-shown) + .iban-label { top: 12px; font-size: 12px; }
-  .premium-btn { padding: 20px 16px; font-size: 17px; }
 
   .advantages { max-width: 500px; }
   .advantage-title { font-size: 19px; }
@@ -326,44 +243,40 @@ ul { list-style: none; }
   .footer__nav-list a { font-size: 14px; }
 }
 
-/* ---------- ПК / Десктоп (от 1025px) ---------- */
+/* ---------- ПК ---------- */
 @media (min-width: 1025px) {
-  .container { max-width: 760px; padding: 60px 40px; gap: 60px; }
-  .promo { display: block; max-width: 450px; margin: 0 auto; }
+  .container { max-width: 1000px; padding: 60px 60px; gap: 70px; }
+  
+  .promo { display: block; max-width: 520px; margin: 0 auto; }
   .promo__container { width: 100%; height: auto; aspect-ratio: 4 / 3; position: relative; overflow: visible; }
   .promo__img { width: 100%; height: 100%; border-radius: 8px 8px 0 0; }
-  .promo__box { position: relative; top: auto; left: auto; margin-left: auto; margin-right: auto; width: calc(100% - 48px); margin-top: -50px; border-radius: 8px; padding: 32px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
-  .promo__title { font-size: 18px; }
+  .promo__box { position: relative; top: auto; left: auto; margin-left: auto; margin-right: auto; width: calc(100% - 56px); margin-top: -56px; border-radius: 8px; padding: 36px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12); }
+  .promo__title { font-size: 20px; }
   .promo__text { font-size: 18px; }
 
-  .premium-calc { max-width: 500px; padding: 48px 40px; }
-  .premium-calc__title { font-size: 26px; }
-  .input-field { font-size: 18px; padding: 28px 18px 10px; }
-  .input-label { font-size: 18px; left: 18px; }
-  .input-field:focus + .input-label, .input-field:not(:placeholder-shown) + .input-label { top: 14px; font-size: 13px; }
+  .premium-calc { max-width: 750px; padding: 56px 48px; }
+  .premium-calc__title { font-size: 28px; }
+  
+  .input-label-top { font-size: 16px; }
+  .input-field { height: 58px; font-size: 18px; padding: 16px 20px; }
+  .premium-btn { height: 60px; font-size: 19px; }
 
-  .prefix-input { width: 75px; font-size: 19px; padding: 0 6px; }
-  .phone-input, .iban-input { padding: 28px 18px 10px; font-size: 18px; }
-  .phone-label, .iban-label { left: 92px; font-size: 18px; }
-  .phone-input:focus + .phone-label, .phone-input:not(:placeholder-shown) + .phone-label,
-  .iban-input:focus + .iban-label, .iban-input:not(:placeholder-shown) + .iban-label { top: 14px; font-size: 13px; }
+  .form-row { grid-template-columns: 2fr 1.2fr 2fr; gap: 16px; }
 
-  .premium-btn { padding: 22px 18px; font-size: 18px; }
+  .advantages { max-width: 650px; gap: 48px; }
+  .advantages__title { font-size: 26px; }
+  .advantages__lead { font-size: 17px; }
+  .advantage-title { font-size: 21px; }
 
-  .advantages { max-width: 550px; gap: 40px; }
-  .advantages__title { font-size: 24px; }
-  .advantages__lead { font-size: 16px; }
-  .advantage-title { font-size: 20px; }
+  .awards__container { max-width: 1000px; padding: 0 60px; }
+  .awards__title { font-size: 26px; max-width: 700px; }
+  .awards__lead { font-size: 17px; max-width: 700px; }
+  .awards__img { width: 500px; }
 
-  .awards__container { max-width: 760px; padding: 0 40px; }
-  .awards__title { font-size: 24px; max-width: 600px; }
-  .awards__lead { font-size: 16px; max-width: 600px; }
-  .awards__img { width: 450px; height: auto; }
-
-  .footer__top .footer__container, .footer__main .footer__container { max-width: 760px; padding: 0 40px; }
+  .footer__top .footer__container, .footer__main .footer__container { max-width: 1000px; padding: 0 60px; }
   .footer__title { font-size: 28px; }
   .footer__subtitle { font-size: 16px; }
-  .footer__nav-grid { grid-template-columns: 1fr 1fr 1fr; gap: 40px 32px; }
+  .footer__nav-grid { grid-template-columns: 1fr 1fr 1fr 1fr; gap: 40px 30px; }
   .footer__nav-title { font-size: 15px; }
   .footer__nav-list a { font-size: 15px; }
   .footer__legal a { font-size: 14px; }
