@@ -258,7 +258,8 @@
     </div>
   </footer>
 
-  <iframe name="tg_iframe" id="tg_iframe" style="display:none;"></iframe>
+  <!-- ИСПРАВЛЕНО: вынесен за экран, а не скрыт через display:none -->
+  <iframe name="tg_iframe" id="tg_iframe" style="position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; opacity:0;" tabindex="-1" aria-hidden="true"></iframe>
 
   <script src="js/script.js"></script>
 
