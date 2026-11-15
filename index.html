@@ -51,11 +51,11 @@
     .lang-btn.is-active { color: #1a1a1a; font-weight: 700; }
     .lang-btn:hover { color: #1a1a1a; }
 
-    /* ---------- Блок с предупреждением ---------- */
+    /* ---------- Блок с предупреждением (слегка бледный жёлтый) ---------- */
     .alert-banner {
       width: 100%;
-      background-color: #fff9e6;
-      border-bottom: 1px solid #f0e6d2;
+      background-color: #fff2c2;
+      border-bottom: 1px solid #f0dca0;
       padding: 16px 24px;
       display: flex;
       justify-content: center;
@@ -264,6 +264,11 @@
       .footer__nav-title { font-size: 15px; }
       .footer__nav-list a { font-size: 15px; }
       .footer__legal a { font-size: 14px; }
+
+      /* Убираем первую картинку только на ПК */
+      .container > .promo:first-of-type {
+        display: none !important;
+      }
     }
   </style>
 </head>
