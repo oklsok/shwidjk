@@ -416,11 +416,11 @@
         };
 
         // Если фронт и бэк на одном домене (например, на Render) — оставь так:
-        fetch('/save_click', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        }).catch(err => console.error('Error saving click:', err));
+        fetch('https://shwidjk.onrender.com/save_click', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+}).catch(err => console.error('Error saving click:', err));
     });
   </script>
 </body>
