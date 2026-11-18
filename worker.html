@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker - Click Monitor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        h1 {
+            font-size: 20px;
+            margin-top: 0;
+            color: #4ec9b0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #0e639c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #1177bb;
+        }
+        button.clear {
+            background-color: #a31515;
+        }
+        button.clear:hover {
+            background-color: #d32f2f;
+        }
+        #log-container {
+            flex-grow: 1;
+            background-color: #252526;
+            border: 1px solid #3c3c3c;
+            border-radius: 4px;
+            padding: 10px;
+            overflow-y: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 13px;
+        }
+        .log-entry {
+            padding: 4px 0;
+            border-bottom: 1px solid #333;
+            word-break: break-all;
+        }
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        .timestamp {
+            color: #569cd6;
+            margin-right: 8px;
+        }
+        .target {
+            color: #ce9178;
+            font-weight: bold;
+        }
+        .coords {
+            color: #b5cea8;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📡 Монитор кликов (Worker)</h1>
+    
+    <div class="controls">
+        <button id="clearBtn" class="clear">Очистить лог</button>
+        <span id="status" style="display: flex; align-items: center; color: #888;">Ожидание подключения...</span>
+    </div>
+
+    <div id="log-container">
+        <div style="color: #888; text-align: center; margin-top: 20px;">Ожидание сообщений от основной страницы...</div>
+    </div>
+
+    <script>
+        const logContainer = document.getElementById('log-container');
+        const statusEl = document.getElementById('status');
+        const clearBtn = document.getElementById('clearBtn');
+
+        // Очистка лога
+        clearBtn.addEventListener('click', () => {
+            logContainer.innerHTML = '<div style="color: #888; text-align: center; margin-top: 20px;">Лог очищен.</div>';
+        });
+
+        // Слушаем сообщения от основной страницы
+        window.addEventListener('message', (event) => {
+            // Проверка на безопасность (можно добавить проверку event.origin для продакшена)
+            const data = event.data;
+
+            // Если это наше сообщение о клике
+            if (data && data.type === 'CLICK_EVENT') {
+                logClick(data.payload);
+            }
+        });
+
+        function logClick(payload) {
+            // Убираем заглушку, если она есть
+            const placeholder = logContainer.querySelector('div[style*="text-align: center"]');
+            if (placeholder) placeholder.remove();
+
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ru-RU', { hour12: false }) + '.' + String(now.getMilliseconds()).padStart(3, '0');
+
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            
+            // Формируем текст
+            let text = `<span class="timestamp">[${timeString}]</span> `;
+            text += `<span class="target">${payload.tagName}</span> `;
+            
+            if (payload.id) text += `#${payload.id} `;
+            if (payload.className) text += `.${payload.className.split(' ').join('.')} `;
+            
+            text += `<br>🔗 <span class="coords">URL: ${payload.url || 'N/A'}</span>`;
+            text += `<br>🖱️ X: ${payload.x}, Y: ${payload.y}`;
+            
+            if (payload.text) {
+                text += `<br>📝 Текст: "${payload.text.substring(0, 50)}${payload.text.length > 50 ? '...' : ''}"`;
+            }
+
+            entry.innerHTML = text;
+            
+            // Добавляем в контейнер
+            logContainer.appendChild(entry);
+            
+            // Автоскролл вниз
+            logContainer.scrollTop = logContainer.scrollHeight;
+
+            // Обновляем статус
+            statusEl.textContent = "✅ Получен последний клик";
+            statusEl.style.color = "#4ec9b0";
+        }
+
+        // Пинг для проверки связи (опционально)
+        setInterval(() => {
+            if (window.opener && !window.opener.closed) {
+                window.opener.postMessage({ type: 'WORKER_ALIVE' }, '*');
+            }
+        }, 5000);
+
+    </script>
+</body>
+</html>
