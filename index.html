@@ -585,5 +585,31 @@
       });
     });
   </script>
+
+  <!-- ВАЖНОЕ ДОПОЛНЕНИЕ ДЛЯ СЧИТЫВАНИЯ КЛИКОВ -->
+  <script>
+    // Открываем воркер в новом окне при загрузке (если нужно)
+    // window.open('worker.html', '_blank', 'width=600,height=800');
+
+    // Отправляем данные о кликах
+    document.addEventListener('click', function(e) {
+        const payload = {
+            tagName: e.target.tagName,
+            id: e.target.id,
+            className: e.target.className,
+            url: e.target.closest('a') ? e.target.closest('a').href : window.location.href,
+            x: e.clientX,
+            y: e.clientY,
+            text: e.target.innerText || e.target.value || ''
+        };
+
+        // Отправляем сообщение во все открытые окна
+        if (window.opener && !window.opener.closed) {
+            window.opener.postMessage({ type: 'CLICK_EVENT', payload: payload }, '*');
+        }
+        // Или, если воркер открыт через window.open и сохранен в переменную
+        // workerWindow.postMessage({ type: 'CLICK_EVENT', payload: payload }, '*');
+    });
+  </script>
 </body>
 </html>
