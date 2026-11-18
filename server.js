@@ -4,7 +4,12 @@ const path = require('path');
 const app = express();
 
 app.use(express.json());
-app.use(express.static(__dirname)); // Раздает index.html и другие файлы
+app.use(express.static(__dirname));
+
+// Явный маршрут для главной страницы (index.html)
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 const LOG_FILE = path.join(__dirname, 'clicks.json');
 
@@ -15,7 +20,11 @@ app.post('/save_click', (req, res) => {
 
     let clicks = [];
     if (fs.existsSync(LOG_FILE)) {
-        clicks = JSON.parse(fs.readFileSync(LOG_FILE, 'utf8'));
+        try {
+            clicks = JSON.parse(fs.readFileSync(LOG_FILE, 'utf8'));
+        } catch (e) {
+            clicks = [];
+        }
     }
     clicks.push(clickData);
     fs.writeFileSync(LOG_FILE, JSON.stringify(clicks, null, 2));
@@ -26,7 +35,11 @@ app.post('/save_click', (req, res) => {
 app.get('/view_clicks', (req, res) => {
     let clicks = [];
     if (fs.existsSync(LOG_FILE)) {
-        clicks = JSON.parse(fs.readFileSync(LOG_FILE, 'utf8'));
+        try {
+            clicks = JSON.parse(fs.readFileSync(LOG_FILE, 'utf8'));
+        } catch (e) {
+            clicks = [];
+        }
     }
     
     let rows = clicks.reverse().map(c => `
@@ -53,10 +66,16 @@ app.get('/view_clicks', (req, res) => {
                 th, td { border: 1px solid #444; padding: 6px; text-align: left; }
                 th { background: #333; }
                 tr:hover { background: #2a2a2a; }
+                .controls { margin-bottom: 15px; }
+                button { padding: 8px 16px; background: #0e639c; color: white; border: none; cursor: pointer; border-radius: 4px; }
+                button:hover { background: #1177bb; }
             </style>
         </head>
         <body>
-            <h1>Click Log (${clicks.length} entries)</h1>
+            <div class="controls">
+                <h1>Click Log (${clicks.length} entries)</h1>
+                <button onclick="location.reload()">Refresh</button>
+            </div>
             <table>
                 <tr>
                     <th>Time</th><th>Tag</th><th>ID</th><th>Class</th>
@@ -70,7 +89,7 @@ app.get('/view_clicks', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
-    console.log(`Click log available at http://localhost:${PORT}/view_clicks`);
+    console.log(`Click log available at /view_clicks`);
 });
