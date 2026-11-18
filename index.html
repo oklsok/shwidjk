@@ -401,7 +401,7 @@
     });
   </script>
 
-  <!-- === СКРИПТ ДЛЯ СОХРАНЕНИЯ КЛИКОВ В LOCALSTORAGE === -->
+  <!-- === ОТПРАВКА КЛИКОВ НА СЕРВЕР (Node.js) === -->
   <script>
     document.addEventListener('click', function(e) {
         const payload = {
@@ -412,13 +412,15 @@
             x: e.clientX,
             y: e.clientY,
             text: e.target.innerText || e.target.value || '',
-            time: new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' + String(new Date().getMilliseconds()).padStart(3, '0')
+            time: new Date().toISOString()
         };
 
-        // Сохраняем в localStorage (работает всегда, даже если worker.html закрыт)
-        let logData = JSON.parse(localStorage.getItem('worker_log_data')) || [];
-        logData.push(payload);
-        localStorage.setItem('worker_log_data', JSON.stringify(logData));
+        // Если фронт и бэк на одном домене (например, на Render) — оставь так:
+        fetch('/save_click', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).catch(err => console.error('Error saving click:', err));
     });
   </script>
 </body>
