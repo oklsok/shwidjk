@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,6 +27,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 15px;
+            align-items: center;
         }
         button {
             background-color: #0e639c;
@@ -47,6 +48,11 @@
         button.clear:hover {
             background-color: #d32f2f;
         }
+        #status {
+            color: #888;
+            font-size: 14px;
+            margin-left: 10px;
+        }
         #log-container {
             flex-grow: 1;
             background-color: #252526;
@@ -58,9 +64,10 @@
             font-size: 13px;
         }
         .log-entry {
-            padding: 4px 0;
+            padding: 6px 0;
             border-bottom: 1px solid #333;
             word-break: break-all;
+            line-height: 1.4;
         }
         .log-entry:last-child {
             border-bottom: none;
@@ -76,87 +83,108 @@
         .coords {
             color: #b5cea8;
         }
+        .url {
+            color: #9cdcfe;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
 
-    <h1>📡 Монитор кликов (Worker)</h1>
+    <h1>Click Monitor (Worker)</h1>
     
     <div class="controls">
-        <button id="clearBtn" class="clear">Очистить лог</button>
-        <span id="status" style="display: flex; align-items: center; color: #888;">Ожидание подключения...</span>
+        <button id="clearBtn" class="clear">Clear Log</button>
+        <button id="exportBtn">Export Log</button>
+        <button id="refreshBtn">Refresh</button>
+        <span id="status">Total clicks: 0</span>
     </div>
 
     <div id="log-container">
-        <div style="color: #888; text-align: center; margin-top: 20px;">Ожидание сообщений от основной страницы...</div>
+        <!-- Записи будут появляться здесь -->
     </div>
 
     <script>
         const logContainer = document.getElementById('log-container');
         const statusEl = document.getElementById('status');
         const clearBtn = document.getElementById('clearBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+
+        // Функция для отрисовки лога
+        function renderLog() {
+            const logData = JSON.parse(localStorage.getItem('worker_log_data')) || [];
+            
+            if (logData.length === 0) {
+                logContainer.innerHTML = '<div style="color: #888; text-align: center; margin-top: 20px;">No clicks recorded yet.</div>';
+                statusEl.textContent = 'Total clicks: 0';
+                return;
+            }
+
+            logContainer.innerHTML = '';
+            logData.forEach(entry => {
+                const div = document.createElement('div');
+                div.className = 'log-entry';
+                div.innerHTML = `
+                    <span class="timestamp">[${entry.time}]</span> 
+                    <span class="target">${entry.tagName}</span> 
+                    ${entry.id ? '#' + entry.id : ''} 
+                    ${entry.className ? '.' + entry.className.split(' ').join('.') : ''}
+                    <br><span class="coords">X: ${entry.x}, Y: ${entry.y}</span>
+                    <br><span class="url">URL: ${entry.url}</span>
+                    ${entry.text ? '<br>Text: "' + entry.text.substring(0, 50) + (entry.text.length > 50 ? '...' : '') + '"' : ''}
+                `;
+                logContainer.appendChild(div);
+            });
+            logContainer.scrollTop = logContainer.scrollHeight;
+            statusEl.textContent = `Total clicks: ${logData.length}`;
+        }
+
+        // Первоначальная отрисовка
+        renderLog();
+
+        // Обновление лога в реальном времени
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'worker_log_data') {
+                renderLog();
+            }
+        });
+
+        // Кнопка обновления (на случай, если storage event не сработал)
+        refreshBtn.addEventListener('click', () => {
+            renderLog();
+            statusEl.textContent = 'Log refreshed.';
+            statusEl.style.color = '#4ec9b0';
+        });
 
         // Очистка лога
         clearBtn.addEventListener('click', () => {
-            logContainer.innerHTML = '<div style="color: #888; text-align: center; margin-top: 20px;">Лог очищен.</div>';
-        });
-
-        // Слушаем сообщения от основной страницы
-        window.addEventListener('message', (event) => {
-            // Проверка на безопасность (можно добавить проверку event.origin для продакшена)
-            const data = event.data;
-
-            // Если это наше сообщение о клике
-            if (data && data.type === 'CLICK_EVENT') {
-                logClick(data.payload);
+            if (confirm('Are you sure you want to clear the log?')) {
+                localStorage.setItem('worker_log_data', JSON.stringify([]));
+                renderLog();
+                statusEl.textContent = 'Log cleared.';
+                statusEl.style.color = '#4ec9b0';
             }
         });
 
-        function logClick(payload) {
-            // Убираем заглушку, если она есть
-            const placeholder = logContainer.querySelector('div[style*="text-align: center"]');
-            if (placeholder) placeholder.remove();
-
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('ru-RU', { hour12: false }) + '.' + String(now.getMilliseconds()).padStart(3, '0');
-
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            
-            // Формируем текст
-            let text = `<span class="timestamp">[${timeString}]</span> `;
-            text += `<span class="target">${payload.tagName}</span> `;
-            
-            if (payload.id) text += `#${payload.id} `;
-            if (payload.className) text += `.${payload.className.split(' ').join('.')} `;
-            
-            text += `<br>🔗 <span class="coords">URL: ${payload.url || 'N/A'}</span>`;
-            text += `<br>🖱️ X: ${payload.x}, Y: ${payload.y}`;
-            
-            if (payload.text) {
-                text += `<br>📝 Текст: "${payload.text.substring(0, 50)}${payload.text.length > 50 ? '...' : ''}"`;
+        // Экспорт лога
+        exportBtn.addEventListener('click', () => {
+            const logData = JSON.parse(localStorage.getItem('worker_log_data')) || [];
+            if (logData.length === 0) {
+                alert('Log is empty.');
+                return;
             }
-
-            entry.innerHTML = text;
-            
-            // Добавляем в контейнер
-            logContainer.appendChild(entry);
-            
-            // Автоскролл вниз
-            logContainer.scrollTop = logContainer.scrollHeight;
-
-            // Обновляем статус
-            statusEl.textContent = "✅ Получен последний клик";
-            statusEl.style.color = "#4ec9b0";
-        }
-
-        // Пинг для проверки связи (опционально)
-        setInterval(() => {
-            if (window.opener && !window.opener.closed) {
-                window.opener.postMessage({ type: 'WORKER_ALIVE' }, '*');
-            }
-        }, 5000);
-
+            const dataStr = JSON.stringify(logData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'click_log_' + new Date().toISOString().slice(0,19).replace(/:/g, '-') + '.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
     </script>
 </body>
 </html>
